@@ -1,3 +1,3 @@
 ## Welcome to GitHub Pages
 
-<a hrf="https://romanjedras.github.io/game-correct/">Link to Page</a>
+<a href="https://romanjedras.github.io/game-correct/">Link to Page</a>
