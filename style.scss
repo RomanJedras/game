@@ -1,0 +1,23 @@
+
+$bodyColor: lightgray;
+$marginTop: 20px;
+
+
+body {
+  background-color: $bodyColor;
+}
+
+#js-newGameElement {
+  margin-top: $marginTop;
+}
+
+
+.game-element-bt,
+.css-playerPickElement {
+  margin-top: $marginTop;
+}
+
+.out {
+  height: 20px;
+  text-align: center;
+}

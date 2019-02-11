@@ -1,0 +1,22 @@
+{
+  "name": "My game",
+  "version": "1.0.0",
+  "description": "Link do strony: <br>\r <a href=\"https://romanjedras.github.io/rock-paper-scissors-game/\">Gitchub link to game</a>",
+  "main": "scripts.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomanJedras/rock-paper-scissors-game.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RomanJedras/rock-paper-scissors-game/issues"
+  },
+  "homepage": "https://github.com/RomanJedras/rock-paper-scissors-game#readme",
+  "devDependencies": {
+    "stylelint": "^9.10.1"
+  }
+}
