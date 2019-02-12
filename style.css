@@ -6,7 +6,8 @@ body {
 
 .game-element-bt,
 .css-playerPickElement {
-  margin-top: 20px; }
+  margin-top: 20px;
+  text-align: center; }
 
 .out {
   height: 20px;
