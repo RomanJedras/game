@@ -9,6 +9,10 @@ body {
   margin-top: 20px;
   text-align: center; }
 
+#js-round-wrap {
+  border-radius: 1rem 1rem 0 0;
+  text-align: center; }
+
 .out {
   height: 20px;
   text-align: center; }
