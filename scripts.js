@@ -2,9 +2,9 @@
 
 
 const newGameButton = document.getElementById('js-newGameButton'),
-      rock_button = document.getElementById('js-playerPick_rock'),
-      paper_button = document.getElementById('js-playerPick_paper'),
-      scissors_button = document.getElementById('js-playerPick_scissors'),
+      rockButton = document.getElementById('js-playerPick_rock'),
+      paperButton = document.getElementById('js-playerPick_paper'),
+      scissorsButton = document.getElementById('js-playerPick_scissors'),
       newGameElem = document.getElementById('js-newGameElement'),
       pickElem = document.getElementById('playerPickElement'),
       resultsElem = document.getElementById('results'),
@@ -16,6 +16,8 @@ const newGameButton = document.getElementById('js-newGameButton'),
       playerResultElem = document.getElementById('playerResult'),
       computerResultElem = document.getElementById('computerResult'),
       playerWelcome = document.getElementById('js-welcome'),
+      newRoundElement = document.getElementById('js-newRoundElement'),
+      newRoundButton = document.getElementById('js-newRoundButton'),
       playerChoose= document.getElementById('player-choose'),
       RoundWrap = document.getElementById('js-round-wrap'),
       roundGame = document.getElementById('round'),
@@ -23,17 +25,15 @@ const newGameButton = document.getElementById('js-newGameButton'),
 
 
 
-
-
-let rounds = 0;
-    let gameState = 'notStarted',  //started // ended //notStarted
-      player = {
+    let gameState = 'notStarted';   //started // ended //notStarted
+    let round=0,rounds = 0, winner = '';
+    const player = {
         name: '',
         score: 0
       },
       computer = {
         score: 0
-      }, round = 0, winner = '';
+      };
 
   const setGameElements = function () {
     if (gameState === 'started') {
@@ -42,16 +42,23 @@ let rounds = 0;
       resultsElem.style.display = 'block';
       playerWelcome.style.display = 'none';
       RoundWrap.style.display = 'block';
+      newRoundButton.style.display='none';
+      newRoundElement.style.display='none';
     } else if (gameState === 'ended') {
       newGameElem.style.display = 'block';
       newGameButton.innerHTML = 'Finish Game';
+      newRoundButton.innerHTML = 'Finish Round : '+(round -1);
       pickElem.style.display = 'none';
       resultsElem.style.display = 'none';
     } else if (gameState === 'finishRound') {
       pickElem.style.display = 'block';
-      newGameElem.style.display = 'block';
-      newGameButton.innerHTML = 'Finish Round : '+(round -1);
+      newGameElem.style.display = 'none';
+      newRoundElement.style.display = 'block';
+      newRoundButton.style.display = 'block';
+      newRoundButton.innerHTML = 'Finish Round : '+(round -1);
     } else {
+      newRoundButton.style.display='none';
+      newRoundElement.style.display='none';
       newGameElem.style.display = 'block';
       pickElem.style.display = 'none';
       resultsElem.style.display = 'none';
@@ -140,15 +147,15 @@ let rounds = 0;
     computerPointsElem.innerText = computer.score;
   }
 
-  rock_button.addEventListener('click', function (event) {
+  rockButton.addEventListener('click', function (event) {
     playerMove(this.name);
   });
 
-  paper_button.addEventListener('click', function () {
+  paperButton.addEventListener('click', function () {
     playerMove(this.name);
   });
 
-  scissors_button.addEventListener('click', function () {
+  scissorsButton.addEventListener('click', function () {
     playerMove(this.name);
   });
 
@@ -161,11 +168,22 @@ let rounds = 0;
      let playerWinsText = "You win the round!",
          computerWinsText = "Computer wins the round!";
 
-    if (player.score === 10 ) {
+     if (player.score === 10 ) {
       round++;
       playerChoose.innerHTML = rounds;
-      roundGame.innerHTML = round;
-      if(rounds > round || rounds == round && rounds > 0 ) {
+      roundGame.innerHTML = round -1;
+
+      if ( rounds === 1 && round === rounds ){
+        gameState = 'ended';
+        alert('Player Win in one round!!');
+        scoreZero();
+        getEndInfo();
+        round = 0;
+      }
+
+      if(rounds > round || rounds === round && rounds > 1 ) {
+        checkRound();
+        alert("You win the round!");
         playerResultElem.innerText = playerWinsText;
         scoreZero();
         gameState = 'finishRound';
@@ -181,8 +199,19 @@ let rounds = 0;
     } else if (computer.score === 10 ) {
       round++;
       playerChoose.innerHTML = rounds;
-      roundGame.innerHTML = round;
-      if(rounds > round || rounds == round && rounds > 0 ) {
+      roundGame.innerHTML = round -1;
+
+      if (rounds === 1 && round === rounds ) {
+        gameState = 'ended';
+        alert('Computer Win in one round !!');
+        scoreZero();
+        getEndInfo();
+        round = 0;
+      }
+
+      if(rounds > round || rounds === round && rounds > 1 ) {
+        checkRound();
+        alert('Computer wins the round!');
         computerResultElem.innerText = computerWinsText;
         gameState = 'finishRound';
         scoreZero();
@@ -207,5 +236,13 @@ let rounds = 0;
     computerResultElem.innerHTML = 'Computer Score';
     playerPickElem.innerHTML = 'Player Selection';
     computerPickElem.innerHTML = 'Computer Selection';
+  }
+
+ function checkRound() {
+   if (round >= 1){
+     roundGame.innerHTML = round;
+   } else {
+     roundGame.innerHTML = round + 1;
+   }
   }
 
