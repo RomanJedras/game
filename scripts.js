@@ -36,33 +36,37 @@ const newGameButton = document.getElementById('js-newGameButton'),
       };
 
   const setGameElements = function () {
-    if (gameState === 'started') {
-      newGameElem.style.display = 'none';
-      pickElem.style.display = 'block';
-      resultsElem.style.display = 'block';
-      playerWelcome.style.display = 'none';
-      RoundWrap.style.display = 'block';
-      newRoundButton.style.display='none';
-      newRoundElement.style.display='none';
-    } else if (gameState === 'ended') {
-      newGameElem.style.display = 'block';
-      newGameButton.innerHTML = 'Finish Game';
-      newRoundButton.innerHTML = 'Finish Round : '+(round -1);
-      pickElem.style.display = 'none';
-      resultsElem.style.display = 'none';
-    } else if (gameState === 'finishRound') {
-      pickElem.style.display = 'block';
-      newGameElem.style.display = 'none';
-      newRoundElement.style.display = 'block';
-      newRoundButton.style.display = 'block';
-      newRoundButton.innerHTML = 'Finish Round : '+(round -1);
-    } else {
-      newRoundButton.style.display='none';
-      newRoundElement.style.display='none';
-      newGameElem.style.display = 'block';
-      pickElem.style.display = 'none';
-      resultsElem.style.display = 'none';
-      RoundWrap.style.display = 'none';
+    switch(gameState) {
+      case 'started':
+        newGameElem.style.display = 'none';
+        pickElem.style.display = 'block';
+        resultsElem.style.display = 'block';
+        playerWelcome.style.display = 'none';
+        RoundWrap.style.display = 'block';
+        newRoundButton.style.display='none';
+        newRoundElement.style.display='none';
+        break;
+      case 'finishRound':
+        pickElem.style.display = 'block';
+        newGameElem.style.display = 'none';
+        newRoundElement.style.display = 'block';
+        newRoundButton.style.display = 'block';
+        newRoundButton.innerHTML = 'Finish Round : '+(round -1);
+      break;
+      case 'ended':
+        newGameElem.style.display = 'block';
+        newGameButton.innerHTML = 'Finish Game';
+        newRoundButton.innerHTML = 'Finish Round : '+(round -1);
+        pickElem.style.display = 'none';
+        resultsElem.style.display = 'none';
+      case 'notStarted':
+      default:
+        newRoundButton.style.display='none';
+        newRoundElement.style.display='none';
+        newGameElem.style.display = 'block';
+        pickElem.style.display = 'none';
+        resultsElem.style.display = 'none';
+        RoundWrap.style.display = 'none';
     }
   };
 
