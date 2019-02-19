@@ -38,7 +38,9 @@ const newGameButton = document.getElementById('js-newGameButton'),
 
 
 
-    let gameState = 'notStarted';   //started // ended //notStarted
+
+
+      let gameState = 'notStarted';   //started // ended //notStarted
     let round=0,rounds = 0, winner = '';
     const player = {
         name: '',
@@ -190,20 +192,17 @@ const newGameButton = document.getElementById('js-newGameButton'),
       round++;
       playerChoose.innerHTML = rounds;
       roundGame.innerHTML = round -1;
-
-      if (rounds > round || rounds === round && rounds > 1 ) {
+        if (rounds > round || rounds === round && rounds > 1 ) {
         alert("You win the round!");
         playerResultElem.innerText = playerWinsText;
         scoreZero();
         gameState = 'finishRound';
       }
-
-    } else if (computer.score === 10 ) {
+     } else if (computer.score === 10 ) {
       round++;
       playerChoose.innerHTML = rounds;
       roundGame.innerHTML = round -1;
-
-      if (rounds > round || rounds === round && rounds > 1 ) {
+        if (rounds > round || rounds === round && rounds > 1 ) {
         alert('Computer wins the round!');
         computerResultElem.innerText = computerWinsText;
         gameState = 'finishRound';
