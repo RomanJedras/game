@@ -197,7 +197,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
           computerWinsText = "Computer wins the round!";
 
       if (rounds > round || rounds === round && rounds > 1 && player === player.name) {
-          alert(player.name +" You win the round!");
+          alert(" You win the round!");
           playerResultElem.innerText = playerWinsText;
           scoreZero();
           gameState = 'finishRound';
