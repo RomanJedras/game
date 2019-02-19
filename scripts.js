@@ -172,17 +172,19 @@ const newGameButton = document.getElementById('js-newGameButton'),
       oneRound();
 
       if (player.score === 10 ) {
+        alert('Ja');
         round++;
         playerChoose.innerHTML = rounds;
         roundGame.innerHTML = round -1;
-        checkWinner(round, 'player');
+        checkWinner(round,'player');
         finishEnd(round);
       } else if (computer.score === 10 ) {
+        alert('Comp');
         round++;
         playerChoose.innerHTML = rounds;
         roundGame.innerHTML = round -1;
-        checkWinner(round, 'computer');
-        finishEnd(round);
+        checkWinner(round,'computer');
+          finishEnd(round);
       }
 
       if (round >= 1){
@@ -194,34 +196,34 @@ const newGameButton = document.getElementById('js-newGameButton'),
   }
 
 
-  function checkWinner(round, player) {
-
+  function checkWinner(round, playerGame='') {
+        alert(playerGame)
       let playerWinsText = "You win the round!",
-          computerWinsText = "Computer wins the round!";
+             computerWinsText = "Computer wins the round!";
 
-      if (rounds > round && rounds > 1 && player === 'player') {
+      if (playerGame === 'player' && rounds > round || round === rounds && rounds > 1 ) {
           alert("You win the round!");
           playerResultElem.innerText = playerWinsText;
-          scoreZero();
+          computer.score = player.score = 0;
           gameState = 'finishRound';
-      } else if (player === 'computer') {
+      } else if (playerGame === 'computer' && rounds > round || round === rounds && rounds > 1 ) {
           alert('Computer wins the round!');
           computerResultElem.innerText = computerWinsText;
           gameState = 'finishRound';
-          scoreZero();
+          computer.score = player.score = 0;
       }
   }
 
   function finishEnd(round){
 
-      if (player.score == 10 && round > rounds && rounds >= 2 ){
+      if (player.score === 10 && round > rounds && rounds >= 2 ){
           gameState = 'ended';
           alert('Player Win !!');
           playerChoose.innerHTML = rounds;
           roundGame.innerHTML = round +1;
           scoreZero();
           getEndInfo();
-      } else if (computer.score== 10 && round > rounds && rounds >= 2 ) {
+      } else if (computer.score === 10 && round > rounds && rounds >= 2 ) {
           gameState = 'ended';
           alert('Computer Win !!');
           roundGame.innerHTML = round + 1;
