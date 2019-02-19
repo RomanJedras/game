@@ -35,11 +35,6 @@ const newGameButton = document.getElementById('js-newGameButton'),
       playerMove(this.name);
       });
 
-
-
-
-
-
       let gameState = 'notStarted';   //started // ended //notStarted
     let round=0,rounds = 0, winner = '';
     const player = {
