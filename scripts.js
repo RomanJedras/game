@@ -90,17 +90,20 @@ const newGameButton = document.getElementById('js-newGameButton'),
       if (rounds > 0) {
       playerChoose.innerHTML = rounds;
       roundGame.innerHTML = round;
-
-      if (player.name) {
-        player.score = computer.score = 0;
-        gameState = 'started';
-        setGameElements();
-        playerNameElem.innerHTML = player.name;
-      }
-    } else {
+      getPlayerName(player.name);
+      } else {
         alert('This is not number');
       }
   };
+
+   function getPlayerName(player) {
+       if (player) {
+           scoreZero();
+           gameState = 'started';
+           setGameElements();
+         playerNameElem.innerHTML = player;
+       }
+   }
 
   const playerMove = function (playerPick) {
     const computerPick = getComputerPick();
@@ -172,15 +175,15 @@ const newGameButton = document.getElementById('js-newGameButton'),
         round++;
         playerChoose.innerHTML = rounds;
         roundGame.innerHTML = round -1;
-        checkWinner(round, player.name);
-     } else if (computer.score === 10 ) {
+        checkWinner(round, 'player');
+        finishEnd(round);
+      } else if (computer.score === 10 ) {
         round++;
         playerChoose.innerHTML = rounds;
         roundGame.innerHTML = round -1;
         checkWinner(round, 'computer');
-    }
-
-      finishGame();
+        finishEnd(round);
+      }
 
       if (round >= 1){
       roundGame.innerHTML = round;
@@ -196,12 +199,12 @@ const newGameButton = document.getElementById('js-newGameButton'),
       let playerWinsText = "You win the round!",
           computerWinsText = "Computer wins the round!";
 
-      if (rounds > round || rounds === round && rounds > 1 && player === player.name) {
-          alert(" You win the round!");
+      if (rounds > round && rounds > 1 && player === 'player') {
+          alert("You win the round!");
           playerResultElem.innerText = playerWinsText;
           scoreZero();
           gameState = 'finishRound';
-      } else {
+      } else if (player === 'computer') {
           alert('Computer wins the round!');
           computerResultElem.innerText = computerWinsText;
           gameState = 'finishRound';
@@ -209,25 +212,24 @@ const newGameButton = document.getElementById('js-newGameButton'),
       }
   }
 
-  function finishGame() {
+  function finishEnd(round){
 
-      if (player.score === 10 && round > rounds && rounds >= 2 ){
+      if (player.score == 10 && round > rounds && rounds >= 2 ){
           gameState = 'ended';
           alert('Player Win !!');
           playerChoose.innerHTML = rounds;
           roundGame.innerHTML = round +1;
           scoreZero();
           getEndInfo();
-      } else if (computer.score === 10 && round > rounds && rounds >= 2 ) {
+      } else if (computer.score== 10 && round > rounds && rounds >= 2 ) {
           gameState = 'ended';
           alert('Computer Win !!');
-          computerResultElem.innerText = computerWinsText;
           roundGame.innerHTML = round + 1;
           scoreZero();
           getEndInfo();
       }
-  }
 
+  }
 
   function oneRound() {
 
