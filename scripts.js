@@ -251,11 +251,5 @@ const newGameButton = document.getElementById('js-newGameButton'),
     computerPickElem.innerHTML = 'Computer Selection';
   }
 
- function checkRound() {
-   if (round >= 1){
-     roundGame.innerHTML = round;
-   } else {
-     roundGame.innerHTML = round + 1;
-   }
-  }
+
 
