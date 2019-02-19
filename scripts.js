@@ -172,8 +172,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
      let playerWinsText = "You win the round!",
          computerWinsText = "Computer wins the round!";
 
-
-    if (player.score === 10 && rounds === 1 && round === rounds ){
+     if (player.score === 10 && rounds === 1 && round === rounds ){
       gameState = 'ended';
       alert('Player Win in one round!!');
       scoreZero();
@@ -187,8 +186,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
       round = 0;
     }
 
-
-    if (player.score === 10 ) {
+     if (player.score === 10 ) {
       round++;
       playerChoose.innerHTML = rounds;
       roundGame.innerHTML = round -1;
@@ -213,8 +211,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
       }
     }
 
-
-    if (player.score === 10 && round > rounds && rounds >= 2 ){
+     if (player.score === 10 && round > rounds && rounds >= 2 ){
       gameState = 'ended';
       alert('Player Win !!');
       playerChoose.innerHTML = rounds;
@@ -230,14 +227,12 @@ const newGameButton = document.getElementById('js-newGameButton'),
       getEndInfo();
     }
 
-
-    if (round >= 1){
+     if (round >= 1){
       roundGame.innerHTML = round;
     } else {
       roundGame.innerHTML = round + 1;
     }
-
-    setGamePoints();
+     setGamePoints();
   }
 
   function scoreZero() {
