@@ -155,7 +155,6 @@ const newGameButton = document.getElementById('js-newGameButton'),
         computerResultElem.innerText = 'Draw!';
         playerResultElem.innerText = 'Draw!';
       }
-
       return winnerIs;
   }
 
@@ -185,7 +184,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
           finishEnd(round);
       }
 
-      if (round >= 1){
+      if (round >= 1) {
       roundGame.innerHTML = round;
     } else {
       roundGame.innerHTML = round + 1;
@@ -211,9 +210,9 @@ const newGameButton = document.getElementById('js-newGameButton'),
       }
   }
 
-  function finishEnd(round){
+  function finishEnd(round) {
 
-      if (player.score === 10 && round > rounds && rounds >= 2 ){
+      if (player.score === 10 && round > rounds && rounds >= 2 ) {
           gameState = 'ended';
           alert('Player Win !!');
           playerChoose.innerHTML = rounds;
@@ -232,7 +231,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
 
   function oneRound() {
 
-      if (player.score === 10 && rounds === 1 && round === rounds ){
+      if (player.score === 10 && rounds === 1 && round === rounds ) {
           gameState = 'ended';
           alert('Player Win in one round!!');
           scoreZero();
