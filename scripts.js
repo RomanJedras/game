@@ -172,15 +172,13 @@ const newGameButton = document.getElementById('js-newGameButton'),
       oneRound();
 
       if (player.score === 10 ) {
-        alert('Ja');
-        round++;
+          round++;
         playerChoose.innerHTML = rounds;
         roundGame.innerHTML = round -1;
         checkWinner(round,'player');
         finishEnd(round);
       } else if (computer.score === 10 ) {
-        alert('Comp');
-        round++;
+          round++;
         playerChoose.innerHTML = rounds;
         roundGame.innerHTML = round -1;
         checkWinner(round,'computer');
@@ -197,16 +195,15 @@ const newGameButton = document.getElementById('js-newGameButton'),
 
 
   function checkWinner(round, playerGame='') {
-        alert(playerGame)
       let playerWinsText = "You win the round!",
              computerWinsText = "Computer wins the round!";
 
-      if (playerGame === 'player' && rounds > round || round === rounds && rounds > 1 ) {
+      if (playerGame !== 'computer' && rounds > round || round === rounds && rounds > 1 ) {
           alert("You win the round!");
           playerResultElem.innerText = playerWinsText;
           computer.score = player.score = 0;
           gameState = 'finishRound';
-      } else if (playerGame === 'computer' && rounds > round || round === rounds && rounds > 1 ) {
+      } else if (playerGame !== 'player' && rounds > round || round === rounds && rounds > 1 ) {
           alert('Computer wins the round!');
           computerResultElem.innerText = computerWinsText;
           gameState = 'finishRound';
