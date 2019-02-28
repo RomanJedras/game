@@ -19,7 +19,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
       newRoundElement = document.getElementById('js-newRoundElement'),
       newRoundButton = document.getElementById('js-newRoundButton'),
       playerChoose= document.getElementById('player-choose'),
-      RoundWrap = document.getElementById('js-round-wrap'),
+      roundWrap = document.getElementById('js-round-wrap'),
       roundGame = document.getElementById('round'),
       tieText = "It's a Tie!";
 
@@ -28,15 +28,15 @@ const newGameButton = document.getElementById('js-newGameButton'),
       });
 
       paperButton.addEventListener('click', function () {
-      playerMove(this.name);
+        playerMove(this.name);
       });
 
       scissorsButton.addEventListener('click', function () {
-      playerMove(this.name);
+        playerMove(this.name);
       });
 
       let gameState = 'notStarted';   //started // ended //notStarted
-    let round=0,rounds = 0, winner = '';
+    let round = 0,rounds = 0, winner = '';
     const player = {
         name: '',
         score: 0
@@ -48,36 +48,36 @@ const newGameButton = document.getElementById('js-newGameButton'),
     const setGameElements = function () {
       switch(gameState) {
       case 'started':
-        newGameElem.style.display = 'none';
-        pickElem.style.display = 'block';
-        resultsElem.style.display = 'block';
-        playerWelcome.style.display = 'none';
-        RoundWrap.style.display = 'block';
-        newRoundButton.style.display = 'none';
-        newRoundElement.style.display = 'none';
+            newGameElem.style.display = 'none';
+            pickElem.style.display = 'block';
+            resultsElem.style.display = 'block';
+            playerWelcome.style.display = 'none';
+            roundWrap.style.display = 'block';
+            newRoundButton.style.display = 'none';
+            newRoundElement.style.display = 'none';
         break;
       case 'finishRound':
-        pickElem.style.display = 'block';
-        newGameElem.style.display = 'none';
-        newRoundElement.style.display = 'block';
-        newRoundButton.style.display = 'block';
-        newRoundButton.innerHTML = 'Finish Round : '+(round -1);
+            pickElem.style.display = 'block';
+            newGameElem.style.display = 'none';
+            newRoundElement.style.display = 'block';
+            newRoundButton.style.display = 'block';
+            newRoundButton.innerHTML = 'Finish Round : '+(round -1);
       break;
       case 'ended':
-        newGameElem.style.display = 'block';
-        newGameButton.innerHTML = 'Finish Game';
-        newRoundButton.innerHTML = 'Finish Round : '+(round -1);
-        pickElem.style.display = 'none';
-        resultsElem.style.display = 'none';
+            newGameElem.style.display = 'block';
+            newGameButton.innerHTML = 'Finish Game';
+            newRoundButton.innerHTML = 'Finish Round : '+(round -1);
+            pickElem.style.display = 'none';
+            resultsElem.style.display = 'none';
       case 'notStarted':
       default:
-        newRoundButton.style.display = 'none';
-        newRoundElement.style.display = 'none';
-        newGameElem.style.display = 'block';
-        pickElem.style.display = 'none';
-        resultsElem.style.display = 'none';
-        RoundWrap.style.display = 'none';
-    }
+            newRoundButton.style.display = 'none';
+            newRoundElement.style.display = 'none';
+            newGameElem.style.display = 'block';
+            pickElem.style.display = 'none';
+            resultsElem.style.display = 'none';
+            roundWrap.style.display = 'none';
+        }
     };
 
   setGameElements();
@@ -88,8 +88,8 @@ const newGameButton = document.getElementById('js-newGameButton'),
       rounds = parseInt(prompt('How much number round do you want play'));
 
       if (rounds > 0) {
-      playerChoose.innerHTML = rounds;
-      roundGame.innerHTML = round;
+        playerChoose.innerHTML = rounds;
+        roundGame.innerHTML = round;
       getPlayerName(player.name);
       } else {
         alert('This is not number');
@@ -110,9 +110,9 @@ const newGameButton = document.getElementById('js-newGameButton'),
     playerPickElem.innerHTML = playerPick;
     computerPickElem.innerHTML = computerPick;
     winner = checkRoundWinner(playerPick, computerPick);
-      endGame();
-      setGamePoints();
-      setGameElements();
+        endGame();
+        setGamePoints();
+        setGameElements();
   };
 
   function random() {
@@ -120,16 +120,13 @@ const newGameButton = document.getElementById('js-newGameButton'),
   };
 
   function getComputerPick() {
-    const randomPick = random();
-    let possiblePicks;
-    if (randomPick === 1) {
-      possiblePicks = 'paper';
-    } else if (randomPick === 2) {
-      possiblePicks = 'rock';
-    } else {
-      possiblePicks = 'scissors';
-    }
-    return possiblePicks;
+      const randomPick = random();
+      if (randomPick === 1) {
+          return 'paper';
+      } else if (randomPick === 2) {
+          return 'rock';
+      }
+      return 'scissors';
   };
 
   function checkRoundWinner(playerPick, computerPick) {
@@ -137,7 +134,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
     playerResultElem.innerHTML = computerResultElem.innerHTML = '';
     let winnerIs = 'player';
     if (playerPick === computerPick) {
-      winnerIs = tieText; //remis
+      winnerIs = tieText; //DRAW
     }
     if (computerPick === 'rock' && playerPick === 'scissors' || computerPick === 'scissors' && playerPick === 'paper') {
       winnerIs = 'computer';
@@ -159,8 +156,8 @@ const newGameButton = document.getElementById('js-newGameButton'),
   }
 
   function setGamePoints() {
-    playerPointsElem.innerText = player.score;
-    computerPointsElem.innerText = computer.score;
+        playerPointsElem.innerText = player.score;
+        computerPointsElem.innerText = computer.score;
   }
 
   newGameButton.addEventListener('click', newGame);
@@ -251,10 +248,10 @@ const newGameButton = document.getElementById('js-newGameButton'),
   }
 
   function getEndInfo(){
-    playerResultElem.innerHTML = 'Player Score';
-    computerResultElem.innerHTML = 'Computer Score';
-    playerPickElem.innerHTML = 'Player Selection';
-    computerPickElem.innerHTML = 'Computer Selection';
+      playerResultElem.innerHTML = 'Player Score';
+      computerResultElem.innerHTML = 'Computer Score';
+      playerPickElem.innerHTML = 'Player Selection';
+      computerPickElem.innerHTML = 'Computer Selection';
   }
 
 
