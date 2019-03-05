@@ -1,4 +1,4 @@
-"jshint.options": { "esversion": 6 }
+
 'use strict';
 
 const newGameButton = document.getElementById('js-newGameButton'),
