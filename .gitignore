@@ -1,6 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 
-node_modules/
+node_modules
 package-lock.json
 style.css.map
 .sass-cache/
+.jshintrc
