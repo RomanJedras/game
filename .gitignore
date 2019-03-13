@@ -5,3 +5,6 @@ package-lock.json
 sass/style.css.map
 .sass-cache/
 .jshintrc
+.stylelintrc
+.sass-cache
+
