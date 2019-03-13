@@ -308,6 +308,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
 
 
      if (gameState === 'ended') {
+       console.log(params)
          modalWindowTwo(game.win);
      }
     }
@@ -320,31 +321,30 @@ const newGameButton = document.getElementById('js-newGameButton'),
     modal.querySelector('#modal-two header').innerHTML = header;
     const table = modal.querySelector('#modal-two table');
     const thead = table.querySelector('thead tr');
-    const  tbody  = table.querySelector('tbody td');
-    const td = new Array();
-    let playerPick = new Array();
+    let td = '';
 
     const count = params.progress['round_user'];
     for (let i = 0; i < count; i++) {
       let tr = getItem('tr');
       appendBox(tr);
       getId(tr, 'index' + i);
+
       for(let j =0; j < thead.childElementCount; j++ ) {
-        td[i] = getItem('td');
-         document.getElementById('index' + i).appendChild(td[i]);
-         if (j === i) {
-           playerPick[i] = params.progress[i+1+'_playerPick'];
-           td[0].innerHTML = (i + 1);
-           let txt = document.createTextNode('IE8');
-           td[1].appendChild(txt);
-
-
-
-          // col[1].innerHTML = (i + 1);
-           //col[2].innerHTML = params[i + 1+'_computerPick'];
-         }
-
+        td = getItem('td');
+         document.getElementById('index' + i).appendChild(td);
       }
+      let k = 0;
+      let col = document.querySelectorAll('tbody tr');
+      col.forEach(function(item) {
+        if (i === k) {
+          item.children[0].innerHTML = (i + 1);
+          item.children[1].innerHTML = params.progress[i+1+'_playerPick'];
+          item.children[2].innerHTML = params.progress[i+1+'_computerPick'];
+          item.children[3].innerHTML = params.progress[i+'_player'];
+          item.children[4].innerHTML = params.progress[i+'_computer'];
+        }
+       k  = k + 1;
+      });
 
     }
    }
