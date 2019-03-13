@@ -4,7 +4,9 @@
   "description": "",
   "main": "scripts.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "browsersync": "browser-sync start --server --files css/*.css *.html",
+    "scss": "node-sass  --output-style compact  -watch  -o css sass"
   },
   "repository": {
     "type": "git",
@@ -20,5 +22,11 @@
     "eslint": "^5.13.0",
     "save-dev": "^2.0.0",
     "stylelint": "^9.10.1"
+  },
+  "devDependencies": {
+    "node-sass": "^4.11.0",
+    "prettier": "^1.16.4",
+    "sass": "^1.17.2",
+    "stylelint-prettier": "^1.0.6"
   }
 }
