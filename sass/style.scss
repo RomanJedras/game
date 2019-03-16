@@ -1,6 +1,21 @@
 $bodyColor: lightgray;
 $marginTop: 20px;
 
+@mixin centererPos($horizontal: true, $vertical: true) {
+  position: absolute;
+  @if ($horizontal and $vertical) {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  } @else if ($horizontal) {
+    left: 50%;
+    transform: translate(-50%, 0);
+  } @else if ($vertical) {
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+}
+
 body {
   background-color: $bodyColor;
 }
@@ -18,6 +33,11 @@ body {
 #js-round-wrap {
   border-radius: 1rem 1rem 0 0;
   text-align: center;
+}
+
+.btn .badge {
+    padding-right: 12px;
+    margin-right: 10px;
 }
 
 .out {
@@ -48,26 +68,23 @@ body {
   background: #fff;
   width: 100%;
   height: auto;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate3d(-50%, -50%, 0);
+  @include centererPos();
 
-  &.show {
-    display: block;
-  }
+ &.show {
+      display: block;
+    }
 
-  .close {
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding: 5px;
-    color: #000;
-    text-decoration: none;
-  }
+   .close {
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: 5px;
+      color: #000;
+      text-decoration: none;
+    }
 
-  header {
-    font-size: 11px;
+    header {
+    font-size: 18px;
     line-height: 30px;
     min-height: auto;
     font-weight: bold;
@@ -78,8 +95,18 @@ body {
     text-align: center;
   }
 
-  &.content {
+    &.content {
     min-height: 30px;
     padding: 5px 30px;
-   }
+  }
  }
+
+.one {
+  width: 260px;
+  height: 200px;
+}
+
+.finish-game {
+  width: calc(100% - 530px);
+  margin: 0 auto;
+}

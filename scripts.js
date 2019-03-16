@@ -1,7 +1,12 @@
 /*jshint esversion: 6 */
+/*global window */
+/* jshint browser: true */
+/* jshint node: true */
+
 'use strict';
 
 const newGameButton = document.getElementById('js-newGameButton'),
+        finishGameButton = document.getElementById('js-finishGameButton'),
         newGameElem = document.getElementById('js-newGameElement'),
         pickElem = document.getElementById('playerPickElement'),
         resultsElem = document.getElementById('results'),
@@ -33,23 +38,10 @@ const newGameButton = document.getElementById('js-newGameButton'),
         let gameState = 'notStarted';   //started // ended //notStarted
 
 
-        const player = {
-            name: '',
-            score: 0,
-            move: 0
-            },
-            computer = {
-            score: 0,
-            move: 0
-        },
-            game = {
-              round: 0,
-              rounds: 0,
-              winner: ''
-            },
-            params = {
-              progress: new Array()
-            };
+        const player = { name: '', score: 0, move: 0 },
+              computer = { score: 0, move: 0 },
+              game = { round: 0, rounds: 0, winner: '' },
+              params = { progress: new Array() };
 
 
 
@@ -64,17 +56,21 @@ const newGameButton = document.getElementById('js-newGameButton'),
             newRoundButton.style.display = 'none';
             newRoundElement.style.display = 'none';
             output.innerHTML = '';
+            finishGameButton.style.display = 'none';
         break;
       case 'finishRound':
             pickElem.style.display = 'block';
             newGameElem.style.display = 'none';
             newRoundElement.style.display = 'block';
             newRoundButton.style.display = 'block';
+            finishGameButton.style.display = 'none';
             newRoundButton.innerHTML = 'Finish Round : '+(game.round - 1);
         break;
       case 'ended':
             newGameElem.style.display = 'block';
-            newGameButton.innerHTML = 'Finish Game';
+            newGameButton.style.display = 'none';
+            finishGameButton.style.display = 'block';
+            finishGameButton.innerHTML = 'Finish Game';
             newRoundButton.style.display = 'none';
             roundGame.innerHTML = checkRound();
             pickElem.style.display = 'none';
@@ -84,6 +80,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
       case 'notStarted':
       default:
             newRoundButton.style.display = 'none';
+            finishGameButton.style.display = 'none';
             newRoundElement.style.display = 'none';
             newGameElem.style.display = 'block';
             pickElem.style.display = 'none';
@@ -91,7 +88,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
             roundWrap.style.display = 'none';
             output.innerHTML = '';
       }
-    }
+    };
 
   setGameElements();
 
@@ -106,7 +103,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
       } else {
         window.alert('This is not number');
       }
-  };
+    };
 
    function getPlayerName(player) {
        if (player) {
@@ -122,7 +119,6 @@ const newGameButton = document.getElementById('js-newGameButton'),
      if (game.rounds > 1 ) {
        game.round = (game.round - 1);
      }
-
      return game.round;
    }
 
@@ -141,11 +137,15 @@ const newGameButton = document.getElementById('js-newGameButton'),
     setGamePoints();
     setGameElements();
 
+    if (gameState === 'ended') {
+      modalWindowTwo(game.win);
+    }
+
   };
 
   function random() {
       return Math.floor(Math.random() * 3);
-  };
+  }
 
   function getComputerPick() {
     const randomPick = random();
@@ -190,27 +190,33 @@ const newGameButton = document.getElementById('js-newGameButton'),
 
   newGameButton.addEventListener('click', newGame);
 
+  finishGameButton.addEventListener('click', finGame);
+
+  function finGame() {
+    document.location.reload();
+  }
+
 
   function endGame() {
 
-    if(game.rounds == 1) {
+    if(game.rounds === 1) {
       oneRound();
+    }
 
+    if (game.round < game.rounds ) {
+      roundGame.innerHTML = game.round;
     }
 
 
-      if (player.score === 10 ) {
+    if (player.score === 10 ) {
         game.round++;
+        console.log(game.round);
         playerChoose.innerHTML = game.rounds;
-
-        if (game.round < game.rounds ) {
-          roundGame.innerHTML = game.round;
-        }
-
         checkWinner(game.round,'player');
         finishEnd(game.round);
       } else if (computer.score === 10 ) {
         game.round++;
+        console.log(game.round);
         playerChoose.innerHTML = game.rounds;
         checkWinner(game.round,'computer');
         finishEnd(game.round);
@@ -247,9 +253,17 @@ const newGameButton = document.getElementById('js-newGameButton'),
       }
   }
 
-  let closeButtons = document.querySelectorAll('.modal .close');
 
-    for(var i = 0; i < closeButtons.length; i++) {
+
+  let closeButtons = document.querySelectorAll('.modal .close'),
+    modal = document.querySelectorAll('.modal');
+
+
+    modal.forEach(function(item){
+      item.addEventListener('click', hideModal);
+    });
+
+    for (let i = 0; i < closeButtons.childElementCount; i++) {
       closeButtons[i].addEventListener('click', hideModal);
     }
 
@@ -257,7 +271,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
 
     if (player.score === 10 && round > game.rounds && game.rounds >= 2 ) {
           gameState = 'ended';
-          modalWindow(player.name.toLocaleUpperCase() +' Win in one round!!');
+          modalWindow(player.name.toLocaleUpperCase() +' Win all round!!');
           playerChoose.innerHTML = game.rounds;
           roundGame.innerHTML = round;
           getProgressGame();
@@ -265,7 +279,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
           getEndInfo();
       } else if (computer.score === 10 && round > game.rounds && game.rounds >= 2 ) {
           gameState = 'ended';
-          modalWindow('Computer Win in one round !!');
+          modalWindow('Computer Win all round !!');
           roundGame.innerHTML = round;
           getProgressGame();
           scoreZero();
@@ -296,21 +310,13 @@ const newGameButton = document.getElementById('js-newGameButton'),
 
   function getProgressGame () {
 
-      if (game.rounds > 1 ) {
-      params.progress[(game.round - 1) + '_player' ]  = player.score;
-      params.progress[(game.round - 1) +'_computer' ]  = computer.score;
-    }else {
-      params.progress[(game.round) + '_player' ]  = player.score;
-      params.progress[(game.round) +'_computer' ]  = computer.score;
+    if (game.rounds >= 1 ) {
+      for (let j =0; j <= game.rounds; j++) {
+        params.progress[j + '_player' ] = player.score;
+        params.progress[j +'_computer' ] = computer.score;
+      }
     }
-      params.progress['round_user'] = game.rounds;
-
-
-
-     if (gameState === 'ended') {
-       console.log(params)
-         modalWindowTwo(game.win);
-     }
+    params.progress.round_user = game.rounds;
     }
 
 
@@ -321,37 +327,44 @@ const newGameButton = document.getElementById('js-newGameButton'),
     modal.querySelector('#modal-two header').innerHTML = header;
     const table = modal.querySelector('#modal-two table');
     const thead = table.querySelector('thead tr');
-    let td = '';
-
-    const count = params.progress['round_user'];
-    for (let i = 0; i < count; i++) {
-      let tr = getItem('tr');
-      appendBox(tr);
-      getId(tr, 'index' + i);
-
-      for(let j =0; j < thead.childElementCount; j++ ) {
-        td = getItem('td');
-         document.getElementById('index' + i).appendChild(td);
+    const count = params.progress.round_user;
+    console.log(params);
+    if (count >= 1) {
+      for (let i = 0; i < count; i++) {
+        let tr = getItem('tr');
+        appendBox(tr);
+        getId(tr, 'index' + i);
+        generateRow(thead, i);
+        generateData(i);
       }
-      let k = 0;
-      let col = document.querySelectorAll('tbody tr');
-      col.forEach(function(item) {
-        if (i === k) {
-          item.children[0].innerHTML = (i + 1);
-          item.children[1].innerHTML = params.progress[i+1+'_playerPick'];
-          item.children[2].innerHTML = params.progress[i+1+'_computerPick'];
-          item.children[3].innerHTML = params.progress[i+'_player'];
-          item.children[4].innerHTML = params.progress[i+'_computer'];
-        }
-       k  = k + 1;
-      });
-
     }
-   }
+  }
+
+  function generateData(indexCol) {
+    let k = 0;
+    let col = document.querySelectorAll('tbody tr');
+    col.forEach(function(item) {
+      if (indexCol === k) {
+        item.children[0].innerHTML = (k + 1);
+        item.children[1].innerHTML = params.progress[k+1+'_playerPick'];
+        item.children[2].innerHTML = params.progress[k+1+'_computerPick'];
+        item.children[3].innerHTML = params.progress[k+'_player'];
+        item.children[4].innerHTML = params.progress[k+'_computer'];
+      }
+      k  = k + 1;
+    });
+  }
+
+  function generateRow(thead, index) {
+      for(let j =0; j < thead.childElementCount; j++ ) {
+      document.getElementById('index' + index).appendChild(getItem('td'));
+    }
+  }
+
 
   function getItem (dataBox) {
-  let item = document.createElement(dataBox);
-  return item;
+    let itemBox = document.createElement(dataBox);
+  return itemBox;
   }
 
   function appendBox (box) {
@@ -359,7 +372,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
   }
 
   function getId(mainItem,id) {
-    if (id !== null && typeof(id) !== undefined ) {
+    if (id !== '' &&  id != null) {
       mainItem.id = id;
     }
   }
@@ -374,12 +387,12 @@ const newGameButton = document.getElementById('js-newGameButton'),
    function hideModal (event){
     event.preventDefault();
     document.querySelector('#modal-overlay').classList.remove('show');
-  }
+    }
 
 
   function scoreZero() {
-    return computer.score = player.score = 0;
-  }
+    computer.score = player.score = 0;
+    }
 
   function getEndInfo(){
       playerResultElem.innerHTML = 'Player Score';
