@@ -311,10 +311,10 @@ const newGameButton = document.getElementById('js-newGameButton'),
   function getProgressGame () {
 
     if (game.rounds >= 1 ) {
-      for (let j =0; j <= game.rounds; j++) {
-        params.progress[j + '_player' ] = player.score;
-        params.progress[j +'_computer' ] = computer.score;
-      }
+      //for (let j =0; j <= game.rounds; j++) {
+        params.progress[(game.round - 1) + '_player' ] = player.score;
+        params.progress[(game.round - 1) +'_computer' ] = computer.score;
+      //}
     }
     params.progress.round_user = game.rounds;
     }
