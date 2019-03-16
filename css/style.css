@@ -28,4 +28,4 @@
 
 /* line 104, sass/style.scss */ .one { width: 260px; height: 200px; }
 
-/* line 109, sass/style.scss */ .finish-game { width: calc(100% - 530px); margin: 0 auto; }
+/* line 109, sass/style.scss */ .finish-game { width: 320px; margin: 0 auto; }
