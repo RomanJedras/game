@@ -133,18 +133,12 @@ const newGameButton = document.getElementById('js-newGameButton'),
     const computerPick = getComputerPick();
     playerPickElem.innerHTML = playerPick;
     computerPickElem.innerHTML = computerPick;
-
     game.winner = checkRoundWinner(playerPick, computerPick);
-
     roundProgress.playerPick = playerPick;
     roundProgress.computerPick = computerPick;
-
     endGame();
     setGamePoints();
     setGameElements();
-
-
-
 
     if (gameState === 'ended') {
       roundProgress.round = game.rounds;
@@ -243,7 +237,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
       let playerWinsText = "You win the round!",
              computerWinsText = "Computer wins the round!";
 
-      if (playerGame !== 'computer' && game.rounds > round || round === game.rounds && game.rounds > 1 ) {
+      if ((playerGame !== 'computer' && game.rounds > round )|| (round === game.rounds && game.rounds > 1 )) {
         game.win = "You win the round!";
         displayRoundWindow(game.win);
         playerResultElem.innerText = playerWinsText;
@@ -252,11 +246,10 @@ const newGameButton = document.getElementById('js-newGameButton'),
         roundProgress.computerScore = computer.score;
         test.push(roundProgress);
         console.log(test);
-
         // setProgressGame();
         scoreZero();
 
-      } else if (playerGame !== 'player' && game.rounds > round || round === game.rounds && game.rounds > 1 ) {
+      } else if ((playerGame !== 'player' && game.rounds > round ) || (round === game.rounds && game.rounds > 1 )) {
          game.win = "Computer wins the round!";
          displayRoundWindow(game.win);
          computerResultElem.innerText = computerWinsText;
@@ -265,7 +258,6 @@ const newGameButton = document.getElementById('js-newGameButton'),
          roundProgress.computerScore = computer.score;
          test.push(roundProgress);
          console.log(test);
-
          //setProgressGame();
          scoreZero();
       }
@@ -296,9 +288,9 @@ const newGameButton = document.getElementById('js-newGameButton'),
           roundGame.innerHTML = round;
           console.log(player.score);
           console.log(computer.score);
-       roundProgress.playerScorelst = player.score;
-       roundProgress.computerScorelst = computer.score;
-       params.progress.push(roundProgress);
+          roundProgress.playerScorelst = player.score;
+          roundProgress.computerScorelst = computer.score;
+          params.progress.push(roundProgress);
       // setProgressGame();
           scoreZero();
           getEndInfo();
@@ -308,9 +300,9 @@ const newGameButton = document.getElementById('js-newGameButton'),
           roundGame.innerHTML = round;
           console.log(player.score);
           console.log(computer.score);
-       roundProgress.playerScorelst = player.score;
-       roundProgress.computerScorelst = computer.score;
-       params.progress.push(roundProgress);
+          roundProgress.playerScorelst = player.score;
+          roundProgress.computerScorelst = computer.score;
+          params.progress.push(roundProgress);
       //setProgressGame();
           scoreZero();
           getEndInfo();
@@ -353,7 +345,6 @@ const newGameButton = document.getElementById('js-newGameButton'),
     modal.querySelector('#modal-two header').innerHTML = header;
     const table = modal.querySelector('#modal-two table');
     const thead = table.querySelector('thead tr');
-    //const count = params.progress.round_user;
     console.log(params);
     // if (count >= 1) {
     // for (let i = 0; i < count; i++) {
@@ -382,7 +373,8 @@ const newGameButton = document.getElementById('js-newGameButton'),
   }
 
   function createRow(thead, index) {
-      for(let j =0; j < thead.childElementCount; j++ ) {
+      let theadCount = thead.childElementCount;
+      for(let j =0; j < theadCount; j++ ) {
       document.getElementById('index' + index).appendChild(createItem('td'));
     }
   }
