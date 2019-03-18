@@ -248,12 +248,11 @@ const newGameButton = document.getElementById('js-newGameButton'),
         displayRoundWindow(game.win);
         playerResultElem.innerText = playerWinsText;
         gameState = 'finishRound';
-        if (gameState === 'finishRound') {
-          roundProgress.playerScore = player.score;
-          roundProgress.computerScore = computer.score;
-          test.push(roundProgress);
-          console.log(test);
-        }
+        roundProgress.playerScore = player.score;
+        roundProgress.computerScore = computer.score;
+        test.push(roundProgress);
+        console.log(test);
+
         // setProgressGame();
         scoreZero();
 
@@ -262,12 +261,11 @@ const newGameButton = document.getElementById('js-newGameButton'),
          displayRoundWindow(game.win);
          computerResultElem.innerText = computerWinsText;
          gameState = 'finishRound';
-        if (gameState === 'finishRound') {
-          roundProgress.playerScore  = player.score;
-          roundProgress.computerScore = computer.score;
-          test.push(roundProgress);
-          console.log(test);
-        }
+         roundProgress.playerScore  = player.score;
+         roundProgress.computerScore = computer.score;
+         test.push(roundProgress);
+         console.log(test);
+
          //setProgressGame();
          scoreZero();
       }
