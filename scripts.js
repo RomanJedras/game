@@ -167,7 +167,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
       winnerIs = tieText; //DRAW
     }
 
-    if (computerPick === 'rock' && playerPick === 'scissors' || computerPick === 'scissors' && playerPick === 'paper') {
+    if ((computerPick === 'rock' && playerPick === 'scissors') || (computerPick === 'scissors' && playerPick === 'paper')) {
       winnerIs = 'computer';
     } else if (computerPick === 'paper' && playerPick === 'rock') {
       winnerIs = 'computer';
@@ -250,16 +250,16 @@ const newGameButton = document.getElementById('js-newGameButton'),
         scoreZero();
 
       } else if ((playerGame !== 'player' && game.rounds > round ) || (round === game.rounds && game.rounds > 1 )) {
-         game.win = "Computer wins the round!";
-         displayRoundWindow(game.win);
-         computerResultElem.innerText = computerWinsText;
-         gameState = 'finishRound';
-         roundProgress.playerScore  = player.score;
-         roundProgress.computerScore = computer.score;
-         test.push(roundProgress);
-         console.log(test);
-         //setProgressGame();
-         scoreZero();
+        game.win = "Computer wins the round!";
+        displayRoundWindow(game.win);
+        computerResultElem.innerText = computerWinsText;
+        gameState = 'finishRound';
+        roundProgress.playerScore  = player.score;
+        roundProgress.computerScore = computer.score;
+        test.push(roundProgress);
+        console.log(test);
+        //setProgressGame();
+        scoreZero();
       }
   }
 
@@ -291,7 +291,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
           roundProgress.playerScorelst = player.score;
           roundProgress.computerScorelst = computer.score;
           params.progress.push(roundProgress);
-      // setProgressGame();
+          // setProgressGame();
           scoreZero();
           getEndInfo();
       } else if (computer.score === 10 && round > game.rounds && game.rounds >= 2 ) {
@@ -303,7 +303,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
           roundProgress.playerScorelst = player.score;
           roundProgress.computerScorelst = computer.score;
           params.progress.push(roundProgress);
-      //setProgressGame();
+          //setProgressGame();
           scoreZero();
           getEndInfo();
       }
