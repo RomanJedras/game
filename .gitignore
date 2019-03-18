@@ -9,3 +9,5 @@ sass/style.css.map
 .sass-cache
 package.json
 .jshintrc-spec
+.eslintrc
+.idea

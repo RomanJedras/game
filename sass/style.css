@@ -13,6 +13,10 @@ body {
   border-radius: 1rem 1rem 0 0;
   text-align: center; }
 
+.btn .badge {
+  padding-right: 12px;
+  margin-right: 10px; }
+
 .out {
   height: 20px;
   text-align: center; }
@@ -34,11 +38,12 @@ body {
 .modal {
   display: none;
   background: #fff;
-  width: 200px;
+  width: 100%;
+  height: auto;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate3d(-50%, -50%, 0); }
+  transform: translate(-50%, -50%); }
   .modal.show {
     display: block; }
   .modal .close {
@@ -49,13 +54,25 @@ body {
     color: #000;
     text-decoration: none; }
   .modal header {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 30px;
-    min-height: 30px;
+    min-height: auto;
     font-weight: bold;
-    padding: 0 30px; }
-  .modal .content {
+    padding: 30px 15px;
+    color: #2cc12b;
+    text-transform: capitalize;
+    white-space: nowrap;
+    text-align: center; }
+  .modal.content {
     min-height: 30px;
     padding: 5px 30px; }
+
+.one {
+  width: 260px;
+  height: 200px; }
+
+.finish-game {
+  width: 320px;
+  margin: 0 auto; }
 
 /*# sourceMappingURL=style.css.map */

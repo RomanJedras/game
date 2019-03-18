@@ -26,26 +26,28 @@ const newGameButton = document.getElementById('js-newGameButton'),
         output = document.getElementById('output'),
         tieText = "It's a Tie!";
 
-        let playerPick = document.querySelectorAll('.player-move');
+  let playerPick = document.querySelectorAll('.player-move');
 
-                playerPick.forEach(function(item) {
-                      item.addEventListener("click", function() {
-                          playerMove(this.getAttribute('data-move'));
-                      });
-                });
-
-
-        let gameState = 'notStarted';   //started // ended //notStarted
+  playerPick.forEach(function(item) {
+      item.addEventListener("click", function() {
+          playerMove(this.getAttribute('data-move'));
+      });
+  });
 
 
-        const player = { name: '', score: 0, move: 0 },
-              computer = { score: 0, move: 0 },
-              game = { round: 0, rounds: 0, winner: '' },
-              params = { progress: new Array() };
+  let gameState = 'notStarted';   //started // ended //notStarted
+
+
+  const player = { name: '', score: 0, move: 0 },
+          computer = { score: 0, move: 0 },
+          game = { round: 0, rounds: 0, winner: '' },
+          params = { progress: [] },
+          test = [],
+          roundProgress = {};
 
 
 
-    const setGameElements = function () {
+  const setGameElements = function () {
       switch(gameState) {
       case 'started':
             newGameElem.style.display = 'none';
@@ -92,7 +94,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
 
   setGameElements();
 
-    const newGame = function () {
+  const newGame = function () {
       player.name = window.prompt('Player, please pass your name', 'Player Name');
       game.round = 1;
       game.rounds = parseInt(window.prompt('How much number round do you want play'));
@@ -103,16 +105,20 @@ const newGameButton = document.getElementById('js-newGameButton'),
       } else {
         window.alert('This is not number');
       }
-    };
+  };
 
    function getPlayerName(player) {
-       if (player) {
-           scoreZero();
-           gameState = 'started';
-           setGameElements();
-         playerNameElem.innerHTML = player;
-       }
+
+     if (! player) {
+         throw new Error('nie podano Name player');
+     }
+
+     scoreZero();
+     gameState = 'started';
+     setGameElements();
+     playerNameElem.innerHTML = player;
    }
+
 
    function checkRound() {
 
@@ -130,17 +136,20 @@ const newGameButton = document.getElementById('js-newGameButton'),
 
     game.winner = checkRoundWinner(playerPick, computerPick);
 
-    params.progress[(game.round)+'_playerPick'] = playerPick;
-    params.progress[(game.round)+'_computerPick'] = computerPick;
-    getProgressGame ();
+    roundProgress.playerPick = playerPick;
+    roundProgress.computerPick = computerPick;
+
     endGame();
     setGamePoints();
     setGameElements();
 
-    if (gameState === 'ended') {
-      modalWindowTwo(game.win);
-    }
 
+
+
+    if (gameState === 'ended') {
+      roundProgress.round = game.rounds;
+      displaymodalScore(game.win);
+    }
   };
 
   function random() {
@@ -160,27 +169,28 @@ const newGameButton = document.getElementById('js-newGameButton'),
   function checkRoundWinner(playerPick, computerPick) {
     playerResultElem.innerHTML = computerResultElem.innerHTML = '';
     let winnerIs = 'player';
-        if (playerPick === computerPick) {
+    if (playerPick === computerPick) {
       winnerIs = tieText; //DRAW
     }
-        if (computerPick === 'rock' && playerPick === 'scissors' || computerPick === 'scissors' && playerPick === 'paper') {
+
+    if (computerPick === 'rock' && playerPick === 'scissors' || computerPick === 'scissors' && playerPick === 'paper') {
       winnerIs = 'computer';
     } else if (computerPick === 'paper' && playerPick === 'rock') {
-        winnerIs = 'computer';
-        }
+      winnerIs = 'computer';
+    }
 
-        if (winnerIs === 'player') {
-        playerResultElem.innerText = 'Player win ';
-        player.score++;
-      } else if (winnerIs === 'computer') {
-        computerResultElem.innerText = 'Computer wins !';
-        computer.score++;
-      } else {
-            computerResultElem.innerText = 'Draw!';
-            playerResultElem.innerText = 'Draw!';
-        }
+    if (winnerIs === 'player') {
+      playerResultElem.innerText = 'Player win ';
+      player.score++;
+    } else if (winnerIs === 'computer') {
+      computerResultElem.innerText = 'Computer wins !';
+      computer.score++;
+    } else {
+      computerResultElem.innerText = 'Draw!';
+      playerResultElem.innerText = 'Draw!';
+    }
 
-        return winnerIs;
+    return winnerIs;
   }
 
   function setGamePoints() {
@@ -209,20 +219,18 @@ const newGameButton = document.getElementById('js-newGameButton'),
 
 
     if (player.score === 10 ) {
-        game.round++;
-        console.log(game.round);
-        playerChoose.innerHTML = game.rounds;
-        checkWinner(game.round,'player');
-        finishEnd(game.round);
-      } else if (computer.score === 10 ) {
-        game.round++;
-        console.log(game.round);
-        playerChoose.innerHTML = game.rounds;
-        checkWinner(game.round,'computer');
-        finishEnd(game.round);
-      }
+      game.round++;
+      playerChoose.innerHTML = game.rounds;
+      checkWinner(game.round,'player');
+      finishEnd(game.round);
+    } else if (computer.score === 10 ) {
+      game.round++;
+      playerChoose.innerHTML = game.rounds;
+      checkWinner(game.round,'computer');
+      finishEnd(game.round);
+    }
 
-      if (game.round >= 1 ) {
+    if (game.round >= 1 ) {
       roundGame.innerHTML = game.round;
     } else {
       roundGame.innerHTML = game.round + 1;
@@ -237,19 +245,31 @@ const newGameButton = document.getElementById('js-newGameButton'),
 
       if (playerGame !== 'computer' && game.rounds > round || round === game.rounds && game.rounds > 1 ) {
         game.win = "You win the round!";
-         playerResultElem.innerText = playerWinsText;
-         modalWindow(game.win);
-         gameState = 'finishRound';
-         getProgressGame();
-         scoreZero();
+        displayRoundWindow(game.win);
+        playerResultElem.innerText = playerWinsText;
+        gameState = 'finishRound';
+        if (gameState === 'finishRound') {
+          roundProgress.playerScore = player.score;
+          roundProgress.computerScore = computer.score;
+          test.push(roundProgress);
+          console.log(test);
+        }
+        // setProgressGame();
+        scoreZero();
 
       } else if (playerGame !== 'player' && game.rounds > round || round === game.rounds && game.rounds > 1 ) {
-          game.win = "Computer wins the round!";
-          modalWindow(game.win);
-          computerResultElem.innerText = computerWinsText;
-          gameState = 'finishRound';
-          getProgressGame();
-          scoreZero();
+         game.win = "Computer wins the round!";
+         displayRoundWindow(game.win);
+         computerResultElem.innerText = computerWinsText;
+         gameState = 'finishRound';
+        if (gameState === 'finishRound') {
+          roundProgress.playerScore  = player.score;
+          roundProgress.computerScore = computer.score;
+          test.push(roundProgress);
+          console.log(test);
+        }
+         //setProgressGame();
+         scoreZero();
       }
   }
 
@@ -263,7 +283,9 @@ const newGameButton = document.getElementById('js-newGameButton'),
       item.addEventListener('click', hideModal);
     });
 
-    for (let i = 0; i < closeButtons.childElementCount; i++) {
+    let buttonsNumber =  closeButtons.childElementCount;
+
+    for (let i = 0; i < buttonsNumber; i++) {
       closeButtons[i].addEventListener('click', hideModal);
     }
 
@@ -271,17 +293,27 @@ const newGameButton = document.getElementById('js-newGameButton'),
 
     if (player.score === 10 && round > game.rounds && game.rounds >= 2 ) {
           gameState = 'ended';
-          modalWindow(player.name.toLocaleUpperCase() +' Win all round!!');
+          displayRoundWindow(player.name.toLocaleUpperCase() +' Win all round!!');
           playerChoose.innerHTML = game.rounds;
           roundGame.innerHTML = round;
-          getProgressGame();
+          console.log(player.score);
+          console.log(computer.score);
+       roundProgress.playerScorelst = player.score;
+       roundProgress.computerScorelst = computer.score;
+       params.progress.push(roundProgress);
+      // setProgressGame();
           scoreZero();
           getEndInfo();
       } else if (computer.score === 10 && round > game.rounds && game.rounds >= 2 ) {
           gameState = 'ended';
-          modalWindow('Computer Win all round !!');
+          displayRoundWindow('Computer Win all round !!');
           roundGame.innerHTML = round;
-          getProgressGame();
+          console.log(player.score);
+          console.log(computer.score);
+       roundProgress.playerScorelst = player.score;
+       roundProgress.computerScorelst = computer.score;
+       params.progress.push(roundProgress);
+      //setProgressGame();
           scoreZero();
           getEndInfo();
       }
@@ -293,14 +325,14 @@ const newGameButton = document.getElementById('js-newGameButton'),
       if (player.score === 10 && game.rounds === 1 && game.round === game.rounds ) {
           gameState = 'ended';
           game.win = player.name.toLocaleUpperCase() +' Win this one round!!';
-          getProgressGame ();
+          setProgressGame ();
           scoreZero();
           getEndInfo();
           game.round = 1;
       } else if (computer.score === 10 && game.rounds === 1 && game.round === game.rounds) {
           gameState = 'ended';
           game.win = 'Computer Win this one round !!';
-          getProgressGame ();
+          setProgressGame ();
           scoreZero();
           getEndInfo();
           game.round = 1;
@@ -308,39 +340,35 @@ const newGameButton = document.getElementById('js-newGameButton'),
   }
 
 
-  function getProgressGame () {
+  function setProgressGame () {
+      roundProgress.playerScore = player.score;
+      roundProgress.computerScore = computer.score;
+      params.progress.push(roundProgress);
 
-    if (game.rounds >= 1 ) {
-      //for (let j =0; j <= game.rounds; j++) {
-        params.progress[(game.round - 1) + '_player' ] = player.score;
-        params.progress[(game.round - 1) +'_computer' ] = computer.score;
-      //}
-    }
-    params.progress.round_user = game.rounds;
-    }
+  }
 
 
-  function modalWindowTwo(header) {
+  function displaymodalScore(header) {
     let modal = document.querySelector('#modal-overlay');
     modal.classList.add('show');
     modal.querySelector('#modal-two').classList.add('show');
     modal.querySelector('#modal-two header').innerHTML = header;
     const table = modal.querySelector('#modal-two table');
     const thead = table.querySelector('thead tr');
-    const count = params.progress.round_user;
+    //const count = params.progress.round_user;
     console.log(params);
-    if (count >= 1) {
-      for (let i = 0; i < count; i++) {
-        let tr = getItem('tr');
-        appendBox(tr);
-        getId(tr, 'index' + i);
-        generateRow(thead, i);
-        generateData(i);
-      }
-    }
-  }
+    // if (count >= 1) {
+    // for (let i = 0; i < count; i++) {
+    // let tr = createItem('tr');
+    // appendBox(tr);
+    // getId(tr, 'index' + i);
+    // createRow(thead, i);
+    // createData(i);
+    // }
+   //}
+ }
 
-  function generateData(indexCol) {
+  function createData(indexCol) {
     let k = 0;
     let col = document.querySelectorAll('tbody tr');
     col.forEach(function(item) {
@@ -355,17 +383,16 @@ const newGameButton = document.getElementById('js-newGameButton'),
     });
   }
 
-  function generateRow(thead, index) {
+  function createRow(thead, index) {
       for(let j =0; j < thead.childElementCount; j++ ) {
-      document.getElementById('index' + index).appendChild(getItem('td'));
+      document.getElementById('index' + index).appendChild(createItem('td'));
     }
   }
 
 
-  function getItem (dataBox) {
-    let itemBox = document.createElement(dataBox);
-  return itemBox;
-  }
+  function createItem (tagName) {
+   return document.createElement(tagName);
+   }
 
   function appendBox (box) {
     document.querySelector("table tbody").appendChild(box);
@@ -377,7 +404,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
     }
   }
 
-  function modalWindow (header) {
+  function displayRoundWindow (header) {
     let modal = document.querySelector('#modal-overlay');
     modal.classList.add('show');
     modal.querySelector('.modal').classList.add('show');

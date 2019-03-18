@@ -7,10 +7,12 @@ $marginTop: 20px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  } @else if ($horizontal) {
+  }
+  @else if ($horizontal) {
     left: 50%;
     transform: translate(-50%, 0);
-  } @else if ($vertical) {
+  }
+  @else if ($vertical) {
     top: 50%;
     transform: translate(0, -50%);
   }
@@ -36,8 +38,8 @@ body {
 }
 
 .btn .badge {
-    padding-right: 12px;
-    margin-right: 10px;
+  padding-right: 12px;
+  margin-right: 10px;
 }
 
 .out {
@@ -75,13 +77,13 @@ body {
     }
 
    .close {
-      position: absolute;
-      right: 0;
-      top: 0;
-      padding: 5px;
-      color: #000;
-      text-decoration: none;
-    }
+     position: absolute;
+     right: 0;
+     top: 0;
+     padding: 5px;
+     color: #000;
+     text-decoration: none;
+   }
 
     header {
     font-size: 18px;
