@@ -85,29 +85,36 @@
     </div>
 </div>
   <!-- MODAL -->
+<div id="output" class="out"></div>
 <div class="overlay" id="modal-overlay">
-  <div class="one modal" id="modal-one">
-      <a href="#" class="close">x</a>
-      <header>Modal one</header>
-    </div>
-  <div class="modal" id="modal-two">
+  <div class="modal" id="modal-one">
     <a href="#" class="close">x</a>
-    <header>Modal two</header>
+    <header>Modal Score window</header>
+    <div id="result" class="content"></div>
     <table id="table" class="table table-hover">
       <thead>
-        <tr>
-           <th id="rounds">Rounds</th>
-           <th scope="col">Player move</th>
-           <th scope="col">Computer move</th>
-           <th scope="col">Score Round Player </th>
-           <th scope="col">Scope Round Computer</th>
-         </tr>
+      <tr>
+        <th id="rounds">Rounds</th>
+        <th scope="col">Player move</th>
+        <th scope="col">Computer move</th>
+        <th scope="col">Score Round Player </th>
+        <th scope="col">Scope Round Computer</th>
+      </tr>
       </thead>
-      <tbody></tbody>
+      <tbody id="table-body"></tbody>
     </table>
   </div>
 </div>
-<div id="output" class="out"></div>
+
+<script id="col-template" type="x-tmpl-mustache">
+      <td>{{ id }}</td>
+      <td>{{ data.player_movement }}</td>
+      <td>{{ data.computer_movement }}</td>
+      <td>{{ data.round_winner }}</td>
+      <td>{{ data.round_result }}</td>
+</script>
+
+<script type="text/javascript" src="vendor/mustashe/mustache.js"></script>
 <script type="text/javascript" src="scripts.js"></script>
 </body>
 </html>

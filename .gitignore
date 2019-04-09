@@ -10,3 +10,6 @@ sass/style.css.map
 .eslintrc
 .idea/
 .idea
+.idea/misc.xml
+.idea/sonarlint/issuestore/index.pb
+.idea/workspace.xml

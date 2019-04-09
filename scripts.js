@@ -24,9 +24,11 @@ const newGameButton = document.getElementById('js-newGameButton'),
         roundWrap = document.getElementById('js-round-wrap'),
         roundGame = document.getElementById('round'),
         output = document.getElementById('output'),
+        result = document.getElementById('result'),
         tieText = "It's a Tie!";
 
   let playerPick = document.querySelectorAll('.player-move');
+  let item = '';
 
   playerPick.forEach(function(item) {
       item.addEventListener("click", function() {
@@ -35,388 +37,289 @@ const newGameButton = document.getElementById('js-newGameButton'),
   });
 
 
-  let gameState = 'notStarted';   //started // ended //notStarted
 
 
-  const player = { name: '', score: 0, move: 0 },
-          computer = { score: 0, move: 0 },
-          game = { round: 0, rounds: 0, winner: '' },
-          params = { progress: [] },
-          test = [],
-          roundProgress = {};
+/* zmienne globalne */
+  const params = {
+    winsPlayer : 0,
+    playerPick : '',
+    winsComputer : 0,
+    score : 10,
+    state : '',
+    round : 0,
+    numberOfRounds : 999,
+    gameOver : false,
+    options : ['paper', 'rock', 'scissors'],
+    progress : [],
+    roundWinner : ''
+};
 
+ params.state = 'notStarted';   //started // ended //notStarted
 
+const newGame = function () {
+  params.playerPick  = window.prompt('Player, please pass your name', 'Player Name');
 
-  const setGameElements = function () {
-      switch(gameState) {
-      case 'started':
-            newGameElem.style.display = 'none';
-            pickElem.style.display = 'block';
-            resultsElem.style.display = 'block';
-            playerWelcome.style.display = 'none';
-            roundWrap.style.display = 'block';
-            newRoundButton.style.display = 'none';
-            newRoundElement.style.display = 'none';
-            output.innerHTML = '';
-            finishGameButton.style.display = 'none';
-        break;
-      case 'finishRound':
-            pickElem.style.display = 'block';
-            newGameElem.style.display = 'none';
-            newRoundElement.style.display = 'block';
-            newRoundButton.style.display = 'block';
-            finishGameButton.style.display = 'none';
-            newRoundButton.innerHTML = 'Finish Round : '+(game.round - 1);
-        break;
-      case 'ended':
-            newGameElem.style.display = 'block';
-            newGameButton.style.display = 'none';
-            finishGameButton.style.display = 'block';
-            finishGameButton.innerHTML = 'Finish Game';
-            newRoundButton.style.display = 'none';
-            roundGame.innerHTML = checkRound();
-            pickElem.style.display = 'none';
-            resultsElem.style.display = 'none';
-            output.innerHTML = '<p>Game over, please press the new game button!</p>';
-        break;
-      case 'notStarted':
-      default:
-            newRoundButton.style.display = 'none';
-            finishGameButton.style.display = 'none';
-            newRoundElement.style.display = 'none';
-            newGameElem.style.display = 'block';
-            pickElem.style.display = 'none';
-            resultsElem.style.display = 'none';
-            roundWrap.style.display = 'none';
-            output.innerHTML = '';
-      }
-    };
+  params.rounds = parseInt(window.prompt('How much number round do you want play'));
 
-  setGameElements();
-
-  const newGame = function () {
-      player.name = window.prompt('Player, please pass your name', 'Player Name');
-      game.round = 1;
-      game.rounds = parseInt(window.prompt('How much number round do you want play'));
-
-      if (game.rounds > 0) {
-        playerChoose.innerHTML = game.rounds;
-        getPlayerName(player.name);
-      } else {
-        window.alert('This is not number');
-      }
-  };
-
-   function getPlayerName(player) {
-
-     if (! player) {
-         throw new Error('nie podano Name player');
-     }
-
-     scoreZero();
-     gameState = 'started';
-     setGameElements();
-     playerNameElem.innerHTML = player;
-   }
-
-
-   function checkRound() {
-
-     if (game.rounds > 1 ) {
-       game.round = (game.round - 1);
-     }
-     return game.round;
-   }
-
-
-  const playerMove = function (playerPick) {
-    const computerPick = getComputerPick();
-    playerPickElem.innerHTML = playerPick;
-    computerPickElem.innerHTML = computerPick;
-    game.winner = checkRoundWinner(playerPick, computerPick);
-    roundProgress.playerPick = playerPick;
-    roundProgress.computerPick = computerPick;
-    endGame();
-    setGamePoints();
-    setGameElements();
-
-    if (gameState === 'ended') {
-      roundProgress.round = game.rounds;
-      displaymodalScore(game.win);
-    }
-  };
-
-  function random() {
-      return Math.floor(Math.random() * 3);
+  if (isNaN(params.rounds) || params.rounds === '') {
+    output.innerText ="the correct number has not been entered" + "<br><br>" + output.innerText;
+  } else if (params.rounds !== null) {
+    playerChoose.innerHTML = params.rounds;
+    params.numberOfRounds = params.rounds;
+    params.gameOver = false;
+    params.winsPlayer = 0;
+    params.winsComputer = 0;
+    roundGame.innerText = params.round + 1;
+    output.innerText = "After " + params.rounds + ' rounds, game is over /n/n' ;
+    getPlayerName(params.playerPick);
   }
+  };
+
+  function getPlayerName(player) {
+
+  if (! player) {
+    throw new Error('nie podano Name player');
+  }
+
+  params.state = 'started';
+  setGameElements();
+  playerNameElem.innerHTML = player;
+}
+
+  function random() { return Math.floor(Math.random() * 3); }
 
   function getComputerPick() {
     const randomPick = random();
-    if (randomPick === 1) {
-          return 'paper';
-      } else if (randomPick === 2) {
-          return 'rock';
-      }
-      return 'scissors';
+    if (randomPick === 1) { return 'paper'; } else if (randomPick === 2) { return 'rock'; }
+  return 'scissors';
+}
+
+  function checkRoundWinner(playerChoice, computerChoice) {
+
+
+    if ((playerChoice === 'paper' && computerChoice === 'rock') ||
+    (playerChoice === 'rock' && computerChoice ===  'scissors') ||
+    (playerChoice === 'scissors' && computerChoice ===  'paper')) {
+    params.winsPlayer++;
+    params.roundWinner = 'player' ;
+  } else {
+    params.winsComputer++;
+    params.roundWinner = 'computer' ;
   }
 
-  function checkRoundWinner(playerPick, computerPick) {
-    playerResultElem.innerHTML = computerResultElem.innerHTML = '';
-    let winnerIs = 'player';
-    if (playerPick === computerPick) {
-      winnerIs = tieText; //DRAW
-    }
+    playerPointsElem.innerText = params.winsPlayer;
+    computerPointsElem.innerText = params.winsComputer;
 
-    if ((computerPick === 'rock' && playerPick === 'scissors') || (computerPick === 'scissors' && playerPick === 'paper')) {
-      winnerIs = 'computer';
-    } else if (computerPick === 'paper' && playerPick === 'rock') {
-      winnerIs = 'computer';
-    }
+   let results = checkWinner(playerChoice,computerChoice);
 
-    if (winnerIs === 'player') {
-      playerResultElem.innerText = 'Player win ';
-      player.score++;
-    } else if (winnerIs === 'computer') {
-      computerResultElem.innerText = 'Computer wins !';
-      computer.score++;
-    } else {
+   if (results !== undefined) {
+     output.innerText = results;
+   }
+
+
+  }
+
+  function checkWinner(playerChoice,computerChoice) {
+    let status;
+
+    if (playerChoice === computerChoice ) {
+      params.roundWinner = tieText; //DRAW
       computerResultElem.innerText = 'Draw!';
       playerResultElem.innerText = 'Draw!';
     }
 
-    return winnerIs;
+
+    if ((params.winsPlayer === params.score) || (params.winsComputer === params.score) && params.numberOfRounds === 1) {
+      params.options.push(playerChoice);
+      params.options.push(computerChoice);
+      params.state = 'ended';
+      showModal('<br> YOU WON THE ENTIRE GAME! <br>');
+    }
+
+
+
+    if (params.winsPlayer === params.score && params.numberOfRounds >= params.round && params.numberOfRounds > 1) {
+        params.round++;
+        params.options.push(playerChoice);
+        params.options.push(computerChoice);
+        status = 'YOU WIN: you played ' + playerChoice +' computer played ' + computerChoice ;
+        playerResultElem.innerText = 'Player win ';
+        params.roundWinner = 'player' ;
+        params.state = 'finishRound';
+        scoreZero();
+        return status;
+    } else if (params.winsComputer === params.score &&  params.numberOfRounds >= params.round && params.numberOfRounds > 1) {
+        params.round++;
+        params.options.push(playerChoice);
+        params.options.push(computerChoice);
+        status = 'YOU LOST: you played ' + playerChoice +' computer played ' + computerChoice ;
+        computerResultElem.innerText = 'Computer wins !';
+        params.roundWinner = 'computer' ;
+        params.state = 'finishRound';
+        scoreZero();
+        return status;
+    }
+
+
+
   }
 
-  function setGamePoints() {
-        playerPointsElem.innerText = player.score;
-        computerPointsElem.innerText = computer.score;
+
+ function addRoundInfo(playerChoice, computerChoice) {
+
+   params.progress.push({
+     player_movement : playerChoice,
+     computer_movement : computerChoice,
+     round_winner : params.roundWinner,
+     round_result : params.winsPlayer + ':' + params.winsComputer
+   });
   }
+
+ function handlePlayerMove (playerChoice) {
+
+    if (params.gameOver === false) {
+     let computerChoice =  getComputerPick();
+     playerPickElem.innerHTML = playerChoice;
+     computerPickElem.innerHTML = computerChoice;
+
+     let resultText = checkRoundWinner(playerChoice, computerChoice);
+
+     if (typeof(resultText) !== "undefined") {
+       output.innerHTML += resultText;
+     }
+
+     if (params.round >= params.numberOfRounds) {
+       params.gameOver = true;
+     }
+
+     addRoundInfo(playerChoice, computerChoice);
+   } else {
+     output.innerHTML += '<br> Game over, please press the new game button! <br>';
+     showWinner();
+     params.state = 'ended';
+   }
+  }
+
+  function scoreZero() {
+  params.winsPlayer = params.winsComputer = 0;
+}
+
+  function showWinner() {
+    if (params.gameOver && params.roundWinner === 'player') {
+      showModal('<br> YOU WON THE ENTIRE GAME!');
+    }else {
+      showModal('<br> COMPUTER WON THE ENTIRE GAME!');
+    }
+  }
+
+
+const setGameElements = function () {
+  switch(params.state) {
+    case 'started':
+      newGameElem.style.display = 'none';
+      pickElem.style.display = 'block';
+      resultsElem.style.display = 'block';
+      playerWelcome.style.display = 'none';
+      roundWrap.style.display = 'block';
+      newRoundButton.style.display = 'none';
+      newRoundElement.style.display = 'none';
+      output.innerHTML = '';
+      finishGameButton.style.display = 'none';
+      break;
+    case 'finishRound':
+      pickElem.style.display = 'block';
+      newGameElem.style.display = 'none';
+      newRoundElement.style.display = 'block';
+      newRoundButton.style.display = 'block';
+      finishGameButton.style.display = 'none';
+      newRoundButton.innerHTML = 'Finish Round : '+(params.round);
+      break;
+    case 'ended':
+      newGameElem.style.display = 'block';
+      newGameButton.style.display = 'none';
+      finishGameButton.style.display = 'block';
+      finishGameButton.innerHTML = 'Finish Game';
+      newRoundButton.style.display = 'none';
+      pickElem.style.display = 'none';
+      resultsElem.style.display = 'none';
+      break;
+    case 'notStarted':
+    default:
+      newRoundButton.style.display = 'none';
+      finishGameButton.style.display = 'none';
+      newRoundElement.style.display = 'none';
+      newGameElem.style.display = 'block';
+      pickElem.style.display = 'none';
+      resultsElem.style.display = 'none';
+      roundWrap.style.display = 'none';
+      output.innerHTML = '';
+    }
+  };
+
+  setGameElements();
 
   newGameButton.addEventListener('click', newGame);
 
-  finishGameButton.addEventListener('click', finGame);
+  const playerMove = function (playerPick) {
+  const computerPick = getComputerPick();
+  playerPickElem.innerHTML = playerPick;
+  computerPickElem.innerHTML = computerPick;
+  handlePlayerMove(playerPick);
+  setGameElements();
 
-  function finGame() {
-    document.location.reload();
-  }
+  if (params.round <= params.numberOfRounds ) roundGame.innerText = params.round + 1;
+};
 
+  let generateProgressTable = function() {
 
-  function endGame() {
-
-    if(game.rounds === 1) {
-      oneRound();
-    }
-
-    if (game.round < game.rounds ) {
-      roundGame.innerHTML = game.round;
-    }
-
-
-    if (player.score === 10 ) {
-      game.round++;
-      playerChoose.innerHTML = game.rounds;
-      checkWinner(game.round,'player');
-      finishEnd(game.round);
-    } else if (computer.score === 10 ) {
-      game.round++;
-      playerChoose.innerHTML = game.rounds;
-      checkWinner(game.round,'computer');
-      finishEnd(game.round);
-    }
-
-    if (game.round >= 1 ) {
-      roundGame.innerHTML = game.round;
-    } else {
-      roundGame.innerHTML = game.round + 1;
-    }
-     setGamePoints();
-  }
-
-
-  function checkWinner(round, playerGame = '') {
-      let playerWinsText = "You win the round!",
-             computerWinsText = "Computer wins the round!";
-
-      if ((playerGame !== 'computer' && game.rounds > round )|| (round === game.rounds && game.rounds > 1 )) {
-        game.win = "You win the round!";
-        displayRoundWindow(game.win);
-        playerResultElem.innerText = playerWinsText;
-        gameState = 'finishRound';
-        roundProgress.playerScore = player.score;
-        roundProgress.computerScore = computer.score;
-        test.push(roundProgress);
-        console.log(test);
-        // setProgressGame();
-        scoreZero();
-
-      } else if ((playerGame !== 'player' && game.rounds > round ) || (round === game.rounds && game.rounds > 1 )) {
-        game.win = "Computer wins the round!";
-        displayRoundWindow(game.win);
-        computerResultElem.innerText = computerWinsText;
-        gameState = 'finishRound';
-        roundProgress.playerScore  = player.score;
-        roundProgress.computerScore = computer.score;
-        test.push(roundProgress);
-        console.log(test);
-        //setProgressGame();
-        scoreZero();
-      }
-  }
-
-
-
-  let closeButtons = document.querySelectorAll('.modal .close'),
-    modal = document.querySelectorAll('.modal');
-
-
-    modal.forEach(function(item){
-      item.addEventListener('click', hideModal);
+    params.progress.forEach(function(round, index) {
+      document.querySelector("table tbody").appendChild(generateVTable (round,index));
     });
+  };
 
-    let buttonsNumber =  closeButtons.childElementCount;
+  function generateVTable (round, index) {
+    item =  generateTemplate('col-template', {data: round, id: index}, 'tr');
+   return item;
+  }
 
-    for (let i = 0; i < buttonsNumber; i++) {
-      closeButtons[i].addEventListener('click', hideModal);
-    }
-
-  function finishEnd(round) {
-
-    if (player.score === 10 && round > game.rounds && game.rounds >= 2 ) {
-          gameState = 'ended';
-          displayRoundWindow(player.name.toLocaleUpperCase() +' Win all round!!');
-          playerChoose.innerHTML = game.rounds;
-          roundGame.innerHTML = round;
-          console.log(player.score);
-          console.log(computer.score);
-          roundProgress.playerScorelst = player.score;
-          roundProgress.computerScorelst = computer.score;
-          params.progress.push(roundProgress);
-          // setProgressGame();
-          scoreZero();
-          getEndInfo();
-      } else if (computer.score === 10 && round > game.rounds && game.rounds >= 2 ) {
-          gameState = 'ended';
-          displayRoundWindow('Computer Win all round !!');
-          roundGame.innerHTML = round;
-          console.log(player.score);
-          console.log(computer.score);
-          roundProgress.playerScorelst = player.score;
-          roundProgress.computerScorelst = computer.score;
-          params.progress.push(roundProgress);
-          //setProgressGame();
-          scoreZero();
-          getEndInfo();
-      }
-    }
+ function  showModal(text){
+   generateProgressTable();
+   document.querySelector('#modal-overlay').classList.add('show');
+   document.querySelector('#modal-one').classList.add('show');
+   result.innerHTML = text + '<br>' + params.winsPlayer + '-' + params.winsComputer;
+}
 
 
-    function oneRound() {
-
-      if (player.score === 10 && game.rounds === 1 && game.round === game.rounds ) {
-          gameState = 'ended';
-          game.win = player.name.toLocaleUpperCase() +' Win this one round!!';
-          setProgressGame ();
-          scoreZero();
-          getEndInfo();
-          game.round = 1;
-      } else if (computer.score === 10 && game.rounds === 1 && game.round === game.rounds) {
-          gameState = 'ended';
-          game.win = 'Computer Win this one round !!';
-          setProgressGame ();
-          scoreZero();
-          getEndInfo();
-          game.round = 1;
-      }
+  function generateTemplate(name, data, basicElement) {
+    const template = document.getElementById(name).innerHTML;
+    let element = document.createElement(basicElement || 'tr');
+    Mustache.parse(template);
+    element.innerHTML = Mustache.render(template, data );
+    return element;
   }
 
 
-  function setProgressGame () {
-      roundProgress.playerScore = player.score;
-      roundProgress.computerScore = computer.score;
-      params.progress.push(roundProgress);
-
-  }
-
-
-  function displaymodalScore(header) {
-    let modal = document.querySelector('#modal-overlay');
-    modal.classList.add('show');
-    modal.querySelector('#modal-two').classList.add('show');
-    modal.querySelector('#modal-two header').innerHTML = header;
-    const table = modal.querySelector('#modal-two table');
-    const thead = table.querySelector('thead tr');
-    console.log(params);
-    // if (count >= 1) {
-    // for (let i = 0; i < count; i++) {
-    // let tr = createItem('tr');
-    // appendBox(tr);
-    // getId(tr, 'index' + i);
-    // createRow(thead, i);
-    // createData(i);
-    // }
-   //}
- }
-
-  function createData(indexCol) {
-    let k = 0;
-    let col = document.querySelectorAll('tbody tr');
-    col.forEach(function(item) {
-      if (indexCol === k) {
-        item.children[0].innerHTML = (k + 1);
-        item.children[1].innerHTML = params.progress[k+1+'_playerPick'];
-        item.children[2].innerHTML = params.progress[k+1+'_computerPick'];
-        item.children[3].innerHTML = params.progress[k+'_player'];
-        item.children[4].innerHTML = params.progress[k+'_computer'];
-      }
-      k  = k + 1;
-    });
-  }
-
-  function createRow(thead, index) {
-      let theadCount = thead.childElementCount;
-      for(let j =0; j < theadCount; j++ ) {
-      document.getElementById('index' + index).appendChild(createItem('td'));
-    }
-  }
-
-
-  function createItem (tagName) {
-   return document.createElement(tagName);
-   }
-
-  function appendBox (box) {
-    document.querySelector("table tbody").appendChild(box);
-  }
-
-  function getId(mainItem,id) {
-    if (id !== '' &&  id != null) {
-      mainItem.id = id;
-    }
-  }
-
-  function displayRoundWindow (header) {
-    let modal = document.querySelector('#modal-overlay');
-    modal.classList.add('show');
-    modal.querySelector('.modal').classList.add('show');
-    modal.querySelector('.modal header').innerHTML = header;
-  }
-
-   function hideModal (event){
+  function hideModal(event){
     event.preventDefault();
     document.querySelector('#modal-overlay').classList.remove('show');
-    }
-
-
-  function scoreZero() {
-    computer.score = player.score = 0;
-    }
-
-  function getEndInfo(){
-      playerResultElem.innerHTML = 'Player Score';
-      computerResultElem.innerHTML = 'Computer Score';
-      playerPickElem.innerHTML = 'Player Selection';
-      computerPickElem.innerHTML = 'Computer Selection';
+    document.querySelector('#modal-one').classList.remove('show');
   }
 
+  let closeButtons = document.querySelectorAll('.modal .close');
+
+  for(let i = 0; i < closeButtons.length; i++){
+    closeButtons[i].addEventListener('click', hideModal);
+  }
+
+  document.querySelector('#modal-overlay').addEventListener('click', hideModal);
+
+  let modals = document.querySelectorAll('.modal');
+
+  for(let i = 0; i < modals.length; i++){
+    modals[i].addEventListener('click', function(event){
+        event.stopPropagation();
+      }
+    );
+  }
 
 
