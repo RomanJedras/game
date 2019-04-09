@@ -1,31 +1,37 @@
-/* line 19, sass/style.scss */ body { background-color: lightgray; }
+/* line 1, sass/style.css */ body { background-color: lightgray; }
 
-/* line 23, sass/style.scss */ #js-newGameElement { margin-top: 20px; }
+/* line 4, sass/style.css */ #js-newGameElement { margin-top: 20px; }
 
-/* line 27, sass/style.scss */ .game-element-bt, .css-playerPickElement { margin-top: 20px; text-align: center; }
+/* line 7, sass/style.css */ .game-element-bt, .css-playerPickElement { margin-top: 20px; text-align: center; }
 
-/* line 33, sass/style.scss */ #js-round-wrap { border-radius: 1rem 1rem 0 0; text-align: center; }
+/* line 12, sass/style.css */ #js-round-wrap { border-radius: 1rem 1rem 0 0; text-align: center; }
 
-/* line 38, sass/style.scss */ .btn .badge { padding-right: 12px; margin-right: 10px; }
+/* line 16, sass/style.css */ .btn .badge { padding-right: 12px; margin-right: 10px; }
 
-/* line 43, sass/style.scss */ .out { height: 20px; text-align: center; }
+/* line 20, sass/style.css */ .out { height: 20px; text-align: center; }
 
-/* line 48, sass/style.scss */ #js-newRoundButton { margin: 20px auto 0; }
+/* line 24, sass/style.css */ #js-newRoundButton { margin: 20px auto 0; }
 
-/* line 52, sass/style.scss */ .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); }
+/* line 27, sass/style.css */ .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); }
 
-/* line 61, sass/style.scss */ .overlay.show { display: block; }
+/* line 35, sass/style.css */ .overlay.show { display: block; }
 
-/* line 66, sass/style.scss */ .modal { display: none; background: #fff; width: 100%; height: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+/* line 38, sass/style.css */ .modal { display: none; background: #fff; width: 100%; height: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-height: 100%; overflow-y: auto; }
 
-/* line 73, sass/style.scss */ .modal.show { display: block; }
+/* line 49, sass/style.css */ .modal.show { display: block; }
 
-/* line 77, sass/style.scss */ .modal .close { position: absolute; right: 0; top: 0; padding: 5px; color: #000; text-decoration: none; }
+/* line 51, sass/style.css */ .modal .close { position: absolute; right: 0; top: 0; padding: 5px; color: #000; text-decoration: none; }
 
-/* line 86, sass/style.scss */ .modal header { font-size: 18px; line-height: 30px; min-height: auto; font-weight: bold; padding: 30px 15px; color: #2cc12b; text-transform: capitalize; white-space: nowrap; text-align: center; }
+/* line 58, sass/style.css */ .modal header { font-size: 18px; line-height: 30px; min-height: auto; font-weight: bold; padding: 30px 15px; color: #2cc12b; text-transform: capitalize; white-space: nowrap; text-align: center; }
 
-/* line 98, sass/style.scss */ .modal.content { min-height: 30px; padding: 5px 30px; }
+/* line 68, sass/style.css */ .modal.content { min-height: 30px; padding: 5px 30px; }
 
-/* line 104, sass/style.scss */ .one { width: 260px; height: 200px; }
+/* line 72, sass/style.css */ .one { width: 260px; height: 200px; }
 
-/* line 109, sass/style.scss */ .finish-game { width: 320px; margin: 0 auto; }
+/* line 76, sass/style.css */ .finish-game { width: 320px; margin: 0 auto; }
+
+/* line 80, sass/style.css */ .new-game { margin: 0 auto; }
+
+/* line 83, sass/style.css */ .content { white-space: nowrap; text-align: center; }
+
+/*# sourceMappingURL=style.css.map */

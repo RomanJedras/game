@@ -133,7 +133,7 @@ const newGame = function () {
       params.options.push(playerChoice);
       params.options.push(computerChoice);
       params.state = 'ended';
-      showModal('<br> YOU WON THE ENTIRE GAME! <br>');
+      showModal(' YOU WON THE ENTIRE GAME!');
     }
 
 
@@ -159,9 +159,6 @@ const newGame = function () {
         scoreZero();
         return status;
     }
-
-
-
   }
 
 
@@ -206,9 +203,9 @@ const newGame = function () {
 
   function showWinner() {
     if (params.gameOver && params.roundWinner === 'player') {
-      showModal('<br> YOU WON THE ENTIRE GAME!');
+      showModal(' YOU WON THE ENTIRE GAME!');
     }else {
-      showModal('<br> COMPUTER WON THE ENTIRE GAME!');
+      showModal(' COMPUTER WON THE ENTIRE GAME!');
     }
   }
 
@@ -243,6 +240,12 @@ const setGameElements = function () {
       pickElem.style.display = 'none';
       resultsElem.style.display = 'none';
       break;
+    case 'notFinished':
+      newGameElem.style.display = 'block';
+      newGameButton.style.display = 'block';
+      roundGame.innerText = '0';
+      playerChoose.innerText = '0';
+      break;
     case 'notStarted':
     default:
       newRoundButton.style.display = 'none';
@@ -257,6 +260,13 @@ const setGameElements = function () {
   };
 
   setGameElements();
+
+
+  finishGameButton.addEventListener('click',function() {
+     this.style.display = 'none';
+     params.state = 'notFinished';
+    setGameElements();
+  });
 
   newGameButton.addEventListener('click', newGame);
 
