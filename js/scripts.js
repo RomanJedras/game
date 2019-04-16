@@ -37,9 +37,7 @@ const newGameButton = document.getElementById('js-newGameButton'),
   });
 
 
-
-
-/* zmienne globalne */
+  /* zmienne globalne */
   const params = {
     winsPlayer : 0,
     playerPick : '',
@@ -47,7 +45,6 @@ const newGameButton = document.getElementById('js-newGameButton'),
     score : 10,
     state : '',
     round : 0,
-    numberOfRounds : 999,
     gameOver : false,
     options : ['paper', 'rock', 'scissors'],
     progress : [],
@@ -59,32 +56,23 @@ const newGameButton = document.getElementById('js-newGameButton'),
 const newGame = function () {
   params.playerPick  = window.prompt('Player, please pass your name', 'Player Name');
 
-  params.rounds = parseInt(window.prompt('How much number round do you want play'));
+  params.numberOfRounds = parseInt(window.prompt('How much number round do you want play'));
 
-  if (isNaN(params.rounds) || params.rounds === '') {
+  reset();
+
+
+  if (isNaN(params.numberOfRounds ) || params.numberOfRounds  === '') {
     output.innerText ="the correct number has not been entered" + "<br><br>" + output.innerText;
-  } else if (params.rounds !== null) {
-    playerChoose.innerHTML = params.rounds;
-    params.numberOfRounds = params.rounds;
+  } else if (params.numberOfRounds !== null) {
+    playerChoose.innerHTML = params.numberOfRounds;
     params.gameOver = false;
-    params.winsPlayer = 0;
-    params.winsComputer = 0;
-    roundGame.innerText = params.round + 1;
-    output.innerText = "After " + params.rounds + ' rounds, game is over /n/n' ;
-    getPlayerName(params.playerPick);
+    roundGame.innerText = params.round;
+
+    params.state = 'started';
+    setGameElements();
+    playerNameElem.innerHTML = params.playerPick;
   }
   };
-
-  function getPlayerName(player) {
-
-  if (! player) {
-    throw new Error('nie podano Name player');
-  }
-
-  params.state = 'started';
-  setGameElements();
-  playerNameElem.innerHTML = player;
-}
 
   function random() { return Math.floor(Math.random() * 3); }
 
@@ -95,69 +83,48 @@ const newGame = function () {
 }
 
   function checkRoundWinner(playerChoice, computerChoice) {
-
-
-    if ((playerChoice === 'paper' && computerChoice === 'rock') ||
-    (playerChoice === 'rock' && computerChoice ===  'scissors') ||
-    (playerChoice === 'scissors' && computerChoice ===  'paper')) {
-    params.winsPlayer++;
-    params.roundWinner = 'player' ;
-  } else {
-    params.winsComputer++;
-    params.roundWinner = 'computer' ;
-  }
-
-    playerPointsElem.innerText = params.winsPlayer;
-    computerPointsElem.innerText = params.winsComputer;
-
-   let results = checkWinner(playerChoice,computerChoice);
-
-   if (results !== undefined) {
-     output.innerText = results;
-   }
-
-
-  }
-
-  function checkWinner(playerChoice,computerChoice) {
-    let status;
-
+  //TODO: weryfikacja warunków przyznawania pkt.
     if (playerChoice === computerChoice ) {
       params.roundWinner = tieText; //DRAW
       computerResultElem.innerText = 'Draw!';
       playerResultElem.innerText = 'Draw!';
+      console.log(1);
     }
 
 
-    if ((params.winsPlayer === params.score) || (params.winsComputer === params.score) && params.numberOfRounds === 1) {
-      params.options.push(playerChoice);
-      params.options.push(computerChoice);
+
+    if ((playerChoice === 'paper' && computerChoice === 'rock') || (playerChoice === 'rock' && computerChoice ===  'scissors') || (playerChoice === 'scissors' && computerChoice ===  'paper')) {
+      params.winsPlayer++;
+      params.roundWinner = 'player' ;
+      output.innerText = 'YOU WIN: you played ' + playerChoice +' computer played ' + computerChoice ;
+      playerResultElem.innerText = 'Player win ';
+      params.state = 'finishRound';
+      console.log(2);
+    } else {
+      params.winsComputer++;
+      output.innerText = 'YOU LOST: you played ' + playerChoice +' computer played ' + computerChoice ;
+      computerResultElem.innerText = 'Computer wins !';
+      params.roundWinner = 'computer' ;
+      params.state = 'finishRound';
+      console.log(3);
+    }
+
+    params.options.push(playerChoice);
+    params.options.push(computerChoice);
+
+    playerPointsElem.innerText = params.winsPlayer;
+    computerPointsElem.innerText = params.winsComputer;
+    checkWinner();
+
+  }
+
+  function checkWinner() {
+
+    params.round++;
+    console.log(params.round);
+    if ( params.round === params.numberOfRounds) {
       params.state = 'ended';
       showModal(' YOU WON THE ENTIRE GAME!');
-    }
-
-
-
-    if (params.winsPlayer === params.score && params.numberOfRounds >= params.round && params.numberOfRounds > 1) {
-        params.round++;
-        params.options.push(playerChoice);
-        params.options.push(computerChoice);
-        status = 'YOU WIN: you played ' + playerChoice +' computer played ' + computerChoice ;
-        playerResultElem.innerText = 'Player win ';
-        params.roundWinner = 'player' ;
-        params.state = 'finishRound';
-        scoreZero();
-        return status;
-    } else if (params.winsComputer === params.score &&  params.numberOfRounds >= params.round && params.numberOfRounds > 1) {
-        params.round++;
-        params.options.push(playerChoice);
-        params.options.push(computerChoice);
-        status = 'YOU LOST: you played ' + playerChoice +' computer played ' + computerChoice ;
-        computerResultElem.innerText = 'Computer wins !';
-        params.roundWinner = 'computer' ;
-        params.state = 'finishRound';
-        scoreZero();
-        return status;
     }
   }
 
@@ -174,6 +141,7 @@ const newGame = function () {
 
  function handlePlayerMove (playerChoice) {
 
+    console.log(params.gameOver);
     if (params.gameOver === false) {
      let computerChoice =  getComputerPick();
      playerPickElem.innerHTML = playerChoice;
@@ -181,13 +149,15 @@ const newGame = function () {
 
      let resultText = checkRoundWinner(playerChoice, computerChoice);
 
-     if (typeof(resultText) !== "undefined") {
+     if (resultText) {
        output.innerHTML += resultText;
      }
 
      if (params.round >= params.numberOfRounds) {
        params.gameOver = true;
      }
+
+
 
      addRoundInfo(playerChoice, computerChoice);
    } else {
@@ -197,8 +167,10 @@ const newGame = function () {
    }
   }
 
-  function scoreZero() {
+  function reset() {
   params.winsPlayer = params.winsComputer = 0;
+  playerPointsElem.innerText = 0;
+  computerPointsElem.innerText = 0;
 }
 
   function showWinner() {
