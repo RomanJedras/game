@@ -58,7 +58,7 @@ const newGame = function () {
   params.numberOfRounds = parseInt(window.prompt('How much number round do you want play'));
 
   reset();
-
+  params.progress = [];
 
   if (isNaN(params.numberOfRounds ) || params.numberOfRounds  === '') {
     output.innerText ="the correct number has not been entered" + "<br><br>" + output.innerText;
