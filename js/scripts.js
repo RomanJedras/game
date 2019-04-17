@@ -87,9 +87,7 @@ const newGame = function () {
       params.roundWinner = tieText; //DRAW
       computerResultElem.innerText = 'Draw!';
       playerResultElem.innerText = 'Draw!';
-    }
-
-    if ((playerChoice === 'paper' && computerChoice === 'rock') || (playerChoice === 'rock' && computerChoice ===  'scissors') || (playerChoice === 'scissors' && computerChoice ===  'paper')) {
+    } else if ((playerChoice === 'paper' && computerChoice === 'rock') || (playerChoice === 'rock' && computerChoice ===  'scissors') || (playerChoice === 'scissors' && computerChoice ===  'paper')) {
       params.winsPlayer++;
       params.roundWinner = 'player' ;
       output.innerText = 'YOU WIN: you played ' + playerChoice +' computer played ' + computerChoice ;
@@ -110,13 +108,14 @@ const newGame = function () {
     computerPointsElem.innerText = params.winsComputer;
     checkWinner();
 
+
   }
 
   function checkWinner() {
 
     params.round++;
     console.log(params.round);
-    if ( params.round === params.numberOfRounds) {
+    if ( params.round === params.numberOfRounds ) {
       params.state = 'ended';
       showModal(' YOU WON THE ENTIRE GAME!');
     }
@@ -124,8 +123,7 @@ const newGame = function () {
 
 
  function addRoundInfo(playerChoice, computerChoice) {
-
-   params.progress.push({
+    params.progress.push({
      player_movement : playerChoice,
      computer_movement : computerChoice,
      round_winner : params.roundWinner,
@@ -133,36 +131,39 @@ const newGame = function () {
    });
   }
 
- function handlePlayerMove (playerChoice) {
+  function handlePlayerMove(playerChoice) {
 
-    console.log(params.gameOver);
+
+    let computerChoice = getComputerPick();
+    playerPickElem.innerHTML = playerChoice;
+    computerPickElem.innerHTML = computerChoice;
+    addRoundInfo(playerChoice, computerChoice);
     if (params.gameOver === false) {
-     let computerChoice =  getComputerPick();
-     playerPickElem.innerHTML = playerChoice;
-     computerPickElem.innerHTML = computerChoice;
+      let resultText = checkRoundWinner(playerChoice, computerChoice);
 
-     let resultText = checkRoundWinner(playerChoice, computerChoice);
 
-     if (resultText) {
-       output.innerHTML += resultText;
-     }
+      if (resultText) {
+        output.innerHTML += resultText;
+      }
 
-     if (params.round >= params.numberOfRounds) {
-       params.gameOver = true;
-     }
+      if (params.round >= params.numberOfRounds) {
+        params.gameOver = true;
+      }
 
-     addRoundInfo(playerChoice, computerChoice);
-   } else {
-     output.innerHTML += '<br> Game over, please press the new game button! <br>';
-     showWinner();
-     params.state = 'ended';
-   }
+
+  } else {
+    output.innerHTML += '<br> Game over, please press the new game button! <br>';
+    showWinner();
+    params.state = 'ended';
+
   }
+}
+
 
   function reset() {
-  params.winsPlayer = params.winsComputer = 0;
-  playerPointsElem.innerText = 0;
-  computerPointsElem.innerText = 0;
+    params.winsPlayer = params.winsComputer = 0;
+    playerPointsElem.innerText = 0;
+    computerPointsElem.innerText = 0;
 }
 
   function showWinner() {
@@ -230,16 +231,15 @@ const setGameElements = function () {
   if (params.round <= params.numberOfRounds ) roundGame.innerText = params.round + 1;
 };
 
-  let generateProgressTable = function() {
-   let template = null;
-   console.log(params.progress)
-
-   params.progress.forEach(function(param, index) {
-      console.log(param)
-       template = generateTemplate('col-template', { data: param, id: index }, 'tr');
-   });
-   console.log(template);
-   document.querySelector("table tbody").appendChild(template);
+  const generateProgressTable = function () {
+   // console.log( params.progress);
+    let template = null;
+    params.progress.forEach(function (param, index) {
+      console.log(param);
+      template = generateTemplate('col-template', {data: param, id: index}, 'tr');
+      document.querySelector("table tbody").appendChild(template);
+    });
+    params.progress = [];
   };
 
   function  showModal(text){
