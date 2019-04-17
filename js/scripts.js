@@ -88,10 +88,7 @@ const newGame = function () {
       params.roundWinner = tieText; //DRAW
       computerResultElem.innerText = 'Draw!';
       playerResultElem.innerText = 'Draw!';
-      console.log(1);
     }
-
-
 
     if ((playerChoice === 'paper' && computerChoice === 'rock') || (playerChoice === 'rock' && computerChoice ===  'scissors') || (playerChoice === 'scissors' && computerChoice ===  'paper')) {
       params.winsPlayer++;
@@ -99,14 +96,12 @@ const newGame = function () {
       output.innerText = 'YOU WIN: you played ' + playerChoice +' computer played ' + computerChoice ;
       playerResultElem.innerText = 'Player win ';
       params.state = 'finishRound';
-      console.log(2);
     } else {
       params.winsComputer++;
       output.innerText = 'YOU LOST: you played ' + playerChoice +' computer played ' + computerChoice ;
       computerResultElem.innerText = 'Computer wins !';
       params.roundWinner = 'computer' ;
       params.state = 'finishRound';
-      console.log(3);
     }
 
     params.options.push(playerChoice);
@@ -157,8 +152,6 @@ const newGame = function () {
        params.gameOver = true;
      }
 
-
-
      addRoundInfo(playerChoice, computerChoice);
    } else {
      output.innerHTML += '<br> Game over, please press the new game button! <br>';
@@ -194,6 +187,7 @@ const setGameElements = function () {
       newRoundElement.style.display = 'none';
       output.innerHTML = '';
       finishGameButton.style.display = 'none';
+      roundGame.innerText = '1';
       break;
     case 'finishRound':
       pickElem.style.display = 'block';
@@ -253,15 +247,27 @@ const setGameElements = function () {
 };
 
   let generateProgressTable = function() {
+   let template = null;
 
-    params.progress.forEach(function(round, index) {
-      document.querySelector("table tbody").appendChild(generateVTable (round,index));
+   console.log(params.progress)
+
+    params.progress.forEach(function(param, index) {
+      console.log(param)
+       template = generateTemplate('col-template', { data: param, id: index }, 'tr');
     });
+    console.log(template);
+      //document.querySelector("table tbody").appendChild(template);
+
+
+
   };
 
-  function generateVTable (round, index) {
-    item =  generateTemplate('col-template', {data: round, id: index}, 'tr');
-   return item;
+  function generateVTable () {
+    console.log(params.progress);
+
+
+
+   //return item;
   }
 
  function  showModal(text){
