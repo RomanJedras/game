@@ -6,7 +6,6 @@
 'use strict';
 
 const newGameButton = document.getElementById('js-newGameButton'),
-        finishGameButton = document.getElementById('js-finishGameButton'),
         newGameElem = document.getElementById('js-newGameElement'),
         pickElem = document.getElementById('playerPickElement'),
         resultsElem = document.getElementById('results'),
@@ -186,7 +185,6 @@ const setGameElements = function () {
       newRoundButton.style.display = 'none';
       newRoundElement.style.display = 'none';
       output.innerHTML = '';
-      finishGameButton.style.display = 'none';
       roundGame.innerText = '1';
       break;
     case 'finishRound':
@@ -194,28 +192,19 @@ const setGameElements = function () {
       newGameElem.style.display = 'none';
       newRoundElement.style.display = 'block';
       newRoundButton.style.display = 'block';
-      finishGameButton.style.display = 'none';
       newRoundButton.innerHTML = 'Finish Round : '+(params.round);
       break;
     case 'ended':
       newGameElem.style.display = 'block';
-      newGameButton.style.display = 'none';
-      finishGameButton.style.display = 'block';
-      finishGameButton.innerHTML = 'Finish Game';
+      newGameButton.style.display = 'block';
+      newGameButton.innerHTML = 'Finish Game';
       newRoundButton.style.display = 'none';
       pickElem.style.display = 'none';
       resultsElem.style.display = 'none';
       break;
-    case 'notFinished':
-      newGameElem.style.display = 'block';
-      newGameButton.style.display = 'block';
-      roundGame.innerText = '0';
-      playerChoose.innerText = '0';
-      break;
     case 'notStarted':
     default:
       newRoundButton.style.display = 'none';
-      finishGameButton.style.display = 'none';
       newRoundElement.style.display = 'none';
       newGameElem.style.display = 'block';
       pickElem.style.display = 'none';
@@ -228,11 +217,6 @@ const setGameElements = function () {
   setGameElements();
 
 
-  finishGameButton.addEventListener('click',function() {
-     this.style.display = 'none';
-     params.state = 'notFinished';
-    setGameElements();
-  });
 
   newGameButton.addEventListener('click', newGame);
 
@@ -248,34 +232,22 @@ const setGameElements = function () {
 
   let generateProgressTable = function() {
    let template = null;
-
    console.log(params.progress)
 
-    params.progress.forEach(function(param, index) {
+   params.progress.forEach(function(param, index) {
       console.log(param)
        template = generateTemplate('col-template', { data: param, id: index }, 'tr');
-    });
-    console.log(template);
-      //document.querySelector("table tbody").appendChild(template);
-
-
-
+   });
+   console.log(template);
+   document.querySelector("table tbody").appendChild(template);
   };
 
-  function generateVTable () {
-    console.log(params.progress);
-
-
-
-   //return item;
+  function  showModal(text){
+    generateProgressTable();
+    document.querySelector('#modal-overlay').classList.add('show');
+    document.querySelector('#modal-one').classList.add('show');
+    result.innerHTML = text + '<br>' + params.winsPlayer + '-' + params.winsComputer;
   }
-
- function  showModal(text){
-   generateProgressTable();
-   document.querySelector('#modal-overlay').classList.add('show');
-   document.querySelector('#modal-one').classList.add('show');
-   result.innerHTML = text + '<br>' + params.winsPlayer + '-' + params.winsComputer;
-}
 
 
   function generateTemplate(name, data, basicElement) {
