@@ -78,12 +78,11 @@ const newGame = function () {
   }
 };
 
+
 function random() { return Math.floor(Math.random() * 3); }
 
-function getComputerPick() {
-  const randomPick = random();
-  if (randomPick === 1) { return 'paper'; } else if (randomPick === 2) { return 'rock'; }
-  return 'scissors';
+function getComputerPick() { const randomPick = random();
+  if (randomPick === 1) { return 'paper'; } else if (randomPick === 2) { return 'rock'; } return 'scissors';
 }
 
 function checkRoundWinner(playerChoice, computerChoice) {
@@ -115,15 +114,9 @@ function checkRoundWinner(playerChoice, computerChoice) {
 }
 
 function checkWinner() {
-
   params.round++;
-  console.log(params.round);
-  if ( params.round === params.numberOfRounds ) {
-    params.state = 'ended';
-    showModal(' YOU WON THE ENTIRE GAME!');
-  }
+  if ( params.round === params.numberOfRounds ) { params.state = 'ended'; showModal(' YOU WON THE ENTIRE GAME!'); }
 }
-
 
 function addRoundInfo(playerChoice, computerChoice) {
   params.progress.push({
@@ -161,10 +154,7 @@ function handlePlayerMove(playerChoice) {
 }
 
 function reset() {
-  params.winsPlayer = params.winsComputer = 0;
-  playerPointsElem.innerText = 0;
-  computerPointsElem.innerText = 0;
-}
+  params.winsPlayer = params.winsComputer = 0; playerPointsElem.innerText = 0; computerPointsElem.innerText = 0; }
 
 function showWinner() {
   if (params.gameOver && params.roundWinner === 'player') {
@@ -173,7 +163,6 @@ function showWinner() {
     showModal(' COMPUTER WON THE ENTIRE GAME!');
   }
 }
-
 
 const setGameElements = function () {
   switch(params.state) {
@@ -233,14 +222,14 @@ const playerMove = function (playerPick) {
 
 const generateProgressTable = function () {
     let template = null;
-    console.log(params);
-
+    console.log(params.progress);
     params.progress.forEach(function (param, index) {
-      template = generateTemplate('col-template', {data: params.progress}, 'tr');
+      console.log(param);
+      if ( param.roundWinner === " " )  {param.round_winner = params.roundWinner};
+      template = generateTemplate('col-template', {data: param,id:index }, 'tr');
       document.querySelector("table tbody").appendChild(template);
     });
-    params.progress = [];
-  };
+};
 
 function  showModal(text){
   generateProgressTable();
