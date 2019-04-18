@@ -228,10 +228,7 @@ const playerMove = function (playerPick) {
 
 const generateProgressTable = function () {
     let template = null;
-    console.log(params.progress);
     params.progress.forEach(function (param, index) {
-      console.log(param);
-      if ( param.roundWinner === " " )  {param.round_winner = params.roundWinner};
       template = generateTemplate('col-template', {data: param,id:index }, 'tr');
       document.querySelector("table tbody").appendChild(template);
     });
