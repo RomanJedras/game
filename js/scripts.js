@@ -110,13 +110,25 @@ function checkRoundWinner(playerChoice, computerChoice) {
 
   playerPointsElem.innerText = params.winsPlayer;
   computerPointsElem.innerText = params.winsComputer;
+  addRoundInfo(playerChoice, computerChoice);
   checkWinner();
 }
 
 function checkWinner() {
+
   params.round++;
-  if ( params.round === params.numberOfRounds ) { params.state = 'ended'; showModal(' YOU WON THE ENTIRE GAME!'); }
+
+  if ( params.round === params.numberOfRounds ) {
+    params.state = 'ended'; showModal(' YOU WON THE ENTIRE GAME!');
+  }
 }
+
+function showWinner() {
+  if (params.gameOver && params.roundWinner === 'player') { showModal(' YOU WON THE ENTIRE GAME!'); } else {
+    showModal(' COMPUTER WON THE ENTIRE GAME!');
+  }
+}
+
 
 function addRoundInfo(playerChoice, computerChoice) {
   params.progress.push({
@@ -143,7 +155,7 @@ function handlePlayerMove(playerChoice) {
       params.gameOver = true;
     }
 
-    addRoundInfo(playerChoice, computerChoice);
+
 
   } else {
     output.innerHTML += '<br> Game over, please press the new game button! <br>';
@@ -156,13 +168,7 @@ function handlePlayerMove(playerChoice) {
 function reset() {
   params.winsPlayer = params.winsComputer = 0; playerPointsElem.innerText = 0; computerPointsElem.innerText = 0; }
 
-function showWinner() {
-  if (params.gameOver && params.roundWinner === 'player') {
-    showModal(' YOU WON THE ENTIRE GAME!');
-  }else {
-    showModal(' COMPUTER WON THE ENTIRE GAME!');
-  }
-}
+
 
 const setGameElements = function () {
   switch(params.state) {
