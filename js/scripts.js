@@ -117,18 +117,16 @@ function checkRoundWinner(playerChoice, computerChoice) {
 function checkWinner() {
 
   params.round++;
-
   if ( params.round === params.numberOfRounds ) {
-    params.state = 'ended'; showModal(' YOU WON THE ENTIRE GAME!');
+    params.state = 'ended';
+    if (params.gameOver && params.roundWinner === 'player') {
+      showModal(' YOU WON THE ENTIRE GAME!');
+    } else {
+      showModal(' COMPUTER WON THE ENTIRE GAME!');
+    }
   }
-}
 
-function showWinner() {
-  if (params.gameOver && params.roundWinner === 'player') { showModal(' YOU WON THE ENTIRE GAME!'); } else {
-    showModal(' COMPUTER WON THE ENTIRE GAME!');
-  }
 }
-
 
 function addRoundInfo(playerChoice, computerChoice) {
   params.progress.push({
@@ -159,7 +157,7 @@ function handlePlayerMove(playerChoice) {
 
   } else {
     output.innerHTML += '<br> Game over, please press the new game button! <br>';
-    showWinner();
+    checkWinner();
     params.state = 'ended';
 
   }
