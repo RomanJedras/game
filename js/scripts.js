@@ -38,7 +38,7 @@ playerPick.forEach(function(item) {
 
 
 /* zmienne globalne */
-const params = {
+let params = {
   winsPlayer : 0,
   playerPick : '',
   winsComputer : 0,
@@ -115,17 +115,17 @@ function checkRoundWinner(playerChoice, computerChoice) {
 }
 
 function checkWinner() {
-
   params.round++;
-  if ( params.round === params.numberOfRounds ) {
+  if ( params.round >= params.numberOfRounds) {
     params.state = 'ended';
-    if (params.gameOver && params.roundWinner === 'player') {
+    if (params.winsPlayer > params.winsComputer) {
       showModal(' YOU WON THE ENTIRE GAME!');
+    } else if (params.winsPlayer === params.winsComputer) {
+      showModal(' Nobody won!');
     } else {
       showModal(' COMPUTER WON THE ENTIRE GAME!');
     }
   }
-
 }
 
 function addRoundInfo(playerChoice, computerChoice) {
@@ -152,9 +152,6 @@ function handlePlayerMove(playerChoice) {
     if (params.round >= params.numberOfRounds) {
       params.gameOver = true;
     }
-
-
-
   } else {
     output.innerHTML += '<br> Game over, please press the new game button! <br>';
     checkWinner();
@@ -198,6 +195,7 @@ const setGameElements = function () {
       break;
     case 'notStarted':
     default:
+      newGameButton.innerHTML = 'New Game';
       newRoundButton.style.display = 'none';
       newRoundElement.style.display = 'none';
       newGameElem.style.display = 'block';
@@ -253,6 +251,21 @@ function hideModal(event){
   event.preventDefault();
   document.querySelector('#modal-overlay').classList.remove('show');
   document.querySelector('#modal-one').classList.remove('show');
+  params = {
+    winsPlayer : 0,
+    playerPick : '',
+    winsComputer : 0,
+    state : '',
+    round : 0,
+    gameOver : false,
+    options : ['paper', 'rock', 'scissors'],
+    progress : [],
+    roundWinner : ''
+  };
+  playerPickElem.innerHTML = 0;
+  computerPickElem.innerHTML = 0;
+  params.state = 'notStarted';
+  setGameElements();
 }
 
 let closeButtons = document.querySelectorAll('.modal .close');
