@@ -5,7 +5,6 @@
 
 'use strict';
 
-
 const newGameButton = document.getElementById('js-newGameButton'),
   newGameElem = document.getElementById('js-newGameElement'),
   pickElem = document.getElementById('playerPickElement'),
@@ -208,8 +207,6 @@ const setGameElements = function () {
 
 setGameElements();
 
-
-
 newGameButton.addEventListener('click', newGame);
 
 const playerMove = function (playerPick) {
@@ -262,15 +259,15 @@ function hideModal(event){
     progress : [],
     roundWinner : ''
   };
-  playerPickElem.innerHTML = 0;
-  computerPickElem.innerHTML = 0;
+  playerPickElem.innerHTML = '0';
+  computerPickElem.innerHTML = '0';
   params.state = 'notStarted';
   setGameElements();
 }
 
 let closeButtons = document.querySelectorAll('.modal .close');
 
-for(let i = 0; i < closeButtons.length; i++){
+for(let i = 0; i < closeButtons.length; i++) {
   closeButtons[i].addEventListener('click', hideModal);
 }
 
@@ -278,7 +275,7 @@ document.querySelector('#modal-overlay').addEventListener('click', hideModal);
 
 let modals = document.querySelectorAll('.modal');
 
-for(let i = 0; i < modals.length; i++){
+for(let i = 0; i < modals.length; i++) {
   modals[i].addEventListener('click', function(event){
       event.stopPropagation();
     }
