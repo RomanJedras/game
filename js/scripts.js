@@ -25,67 +25,63 @@ const newGameButton = document.getElementById('js-newGameButton'),
   output = document.getElementById('output'),
   result = document.getElementById('result'),
   tieText = "It's a Tie!";
+  let playerPick = document.querySelectorAll('.player-move');
 
-let playerPick = document.querySelectorAll('.player-move');
 
-
-playerPick.forEach(function(item) {
-  item.addEventListener("click", function() {
-    playerMove(this.getAttribute('data-move'));
+  playerPick.forEach(function(item) {
+    item.addEventListener("click", function() {
+      playerMove(this.getAttribute('data-move'));
+    });
   });
-});
 
 
-/* globals verbs */
-let params = {
-  winsPlayer : 0,
-  playerPick : '',
-  winsComputer : 0,
-  state : '',
-  round : 0,
-  gameOver : false,
-  options : ['paper', 'rock', 'scissors'],
-  progress : [],
-  roundWinner : ''
-};
+  /* globals verbs */
+  let params = {
+    winsPlayer : 0,
+    playerPick : '',
+    winsComputer : 0,
+    state : '',
+    round : 0,
+    gameOver : false,
+    options : ['paper', 'rock', 'scissors'],
+    progress : [],
+    roundWinner : ''
+  };
 
-params.state = 'notStarted';   //started // ended //notStarted
+  params.state = 'notStarted';   //started // ended //notStarted
 
-const newGame = function () {
-  params.playerPick  = window.prompt('Player, please pass your name', 'Player Name');
-  params.numberOfRounds = parseInt(window.prompt('How much number round do you want play'));
-  reset();
-
-  while (document.querySelector("table tbody").children.length) {
+  const newGame = function () {
+    params.playerPick  = window.prompt('Player, please pass your name', 'Player Name');
+    params.numberOfRounds = parseInt(window.prompt('How much number round do you want play'));
+    reset();
+    while (document.querySelector("table tbody").children.length) {
     document.querySelector("table tbody").removeChild(document.querySelector("table tbody").lastChild);
   }
+    if (isNaN(params.numberOfRounds ) || params.numberOfRounds  === '') {
+      output.innerText ="the correct number has not been entered" + "<br><br>" + output.innerText;
+      } else if (params.numberOfRounds !== null) {
+        playerChoose.innerHTML = params.numberOfRounds;
+        params.gameOver = false;
+        params.winsPlayer = 0;
+        params.winsComputer = 0;
+        // output.innerHTML = '';
+        roundGame.innerText = params.round;
+        params.state = 'started';
+        setGameElements();
+        playerNameElem.innerHTML = params.playerPick;
+      }
+    };
 
 
-  if (isNaN(params.numberOfRounds ) || params.numberOfRounds  === '') {
-    output.innerText ="the correct number has not been entered" + "<br><br>" + output.innerText;
-  } else if (params.numberOfRounds !== null) {
-    playerChoose.innerHTML = params.numberOfRounds;
-    params.gameOver = false;
-    params.winsPlayer = 0;
-    params.winsComputer = 0;
-    output.innerHTML = '';
-    roundGame.innerText = params.round;
-    params.state = 'started';
-    setGameElements();
-    playerNameElem.innerHTML = params.playerPick;
+  function random() { return Math.floor(Math.random() * 3); }
+
+  function getComputerPick() { const randomPick = random();
+    if (randomPick === 1) { return 'paper'; } else if (randomPick === 2) { return 'rock'; } return 'scissors';
   }
-};
 
+  function checkRoundWinner(playerChoice, computerChoice) {
 
-function random() { return Math.floor(Math.random() * 3); }
-
-function getComputerPick() { const randomPick = random();
-  if (randomPick === 1) { return 'paper'; } else if (randomPick === 2) { return 'rock'; } return 'scissors';
-}
-
-function checkRoundWinner(playerChoice, computerChoice) {
-
-  if (playerChoice === computerChoice ) {
+    if (playerChoice === computerChoice ) {
     params.roundWinner = tieText; //DRAW
     computerResultElem.innerText = 'Draw!';
     playerResultElem.innerText = 'Draw!';
@@ -103,45 +99,43 @@ function checkRoundWinner(playerChoice, computerChoice) {
     params.state = 'finishRound';
   }
 
-  params.options.push(playerChoice);
-  params.options.push(computerChoice);
+    params.options.push(playerChoice);
+    params.options.push(computerChoice);
+    playerPointsElem.innerText = params.winsPlayer;
+    computerPointsElem.innerText = params.winsComputer;
+    addRoundInfo(playerChoice, computerChoice);
+    checkWinner();
+  }
 
-  playerPointsElem.innerText = params.winsPlayer;
-  computerPointsElem.innerText = params.winsComputer;
-  addRoundInfo(playerChoice, computerChoice);
-  checkWinner();
-}
-
-function checkWinner() {
-  params.round++;
-  if ( params.round >= params.numberOfRounds) {
-    params.state = 'ended';
-    if (params.winsPlayer > params.winsComputer) {
-      showModal(' YOU WON THE ENTIRE GAME!');
-    } else if (params.winsPlayer === params.winsComputer) {
-      showModal(' Nobody won!');
-    } else {
-      showModal(' COMPUTER WON THE ENTIRE GAME!');
+  function checkWinner() {
+    params.round++;
+    if ( params.round >= params.numberOfRounds) {
+      params.state = 'ended';
+      if (params.winsPlayer > params.winsComputer) {
+        showModal(' YOU WON THE ENTIRE GAME!');
+      } else if (params.winsPlayer === params.winsComputer) {
+        showModal(' Nobody won!');
+      } else {
+        showModal(' COMPUTER WON THE ENTIRE GAME!');
+      }
     }
   }
-}
 
-function addRoundInfo(playerChoice, computerChoice) {
-  params.progress.push({
-    player_movement : playerChoice,
-    computer_movement : computerChoice,
-    round_winner : params.roundWinner,
-    round_result : params.winsPlayer + ':' + params.winsComputer
-  });
-}
+  function addRoundInfo(playerChoice, computerChoice) {
+      params.progress.push({
+      player_movement : playerChoice,
+      computer_movement : computerChoice,
+      round_winner : params.roundWinner,
+      round_result : params.winsPlayer + ':' + params.winsComputer
+    });
+  }
 
-function handlePlayerMove(playerChoice) {
+  function handlePlayerMove(playerChoice) {
 
-  if (params.gameOver === false) {
+    if (params.gameOver === false) {
     let computerChoice = getComputerPick();
     playerPickElem.innerHTML = playerChoice;
     computerPickElem.innerHTML = computerChoice;
-
     let resultText = checkRoundWinner(playerChoice, computerChoice);
 
     if (resultText) {
@@ -151,19 +145,16 @@ function handlePlayerMove(playerChoice) {
       params.gameOver = true;
     }
   } else {
-    output.innerHTML += '<br> Game over, please press the new game button! <br>';
-    checkWinner();
-    params.state = 'ended';
-
+      output.innerHTML += "<br> Game over, please press the new game button! <br>";
+      checkWinner();
+      params.state = "ended";
+    }
   }
-}
 
-function reset() {
-  params.winsPlayer = params.winsComputer = 0; playerPointsElem.innerText = '0'; computerPointsElem.innerText = '0'; }
+  function reset() {
+    params.winsPlayer = params.winsComputer = 0; playerPointsElem.innerText = '0'; computerPointsElem.innerText = '0'; }
 
-
-
-const setGameElements = function () {
+  const setGameElements = function () {
   switch(params.state) {
     case 'started':
       newGameElem.style.display = 'none';
@@ -203,11 +194,11 @@ const setGameElements = function () {
   }
 };
 
-setGameElements();
+  setGameElements();
 
-newGameButton.addEventListener('click', newGame);
+  newGameButton.addEventListener('click', newGame);
 
-const playerMove = function (playerPick) {
+  const playerMove = function (playerPick) {
   const computerPick = getComputerPick();
   playerPickElem.innerHTML = playerPick;
   computerPickElem.innerHTML = computerPick;
@@ -217,36 +208,34 @@ const playerMove = function (playerPick) {
   if (params.round <= params.numberOfRounds ) roundGame.innerText = params.round + 1;
 };
 
-const generateProgressTable = function () {
-    let template = null;
-    params.progress.forEach(function (param, index) {
-      template = generateTemplate('col-template', {data: param,id:index }, 'tr');
+  const generateProgressTable = function () {
+      let template = null;
+      params.progress.forEach(function (param, index) {
+        template = generateTemplate('col-template', {data: param,id:index }, 'tr');
       document.querySelector("table tbody").appendChild(template);
     });
-};
+  };
 
-function  showModal(text){
-  generateProgressTable();
-  document.querySelector('#modal-overlay').classList.add('show');
-  document.querySelector('#modal-one').classList.add('show');
-  result.innerHTML = text + '<br>' + params.winsPlayer + '-' + params.winsComputer;
-}
+  function  showModal(text) {
+    generateProgressTable();
+    document.querySelector('#modal-overlay').classList.add('show');
+    document.querySelector('#modal-one').classList.add('show');
+    result.innerHTML = text + '<br>' + params.winsPlayer + '-' + params.winsComputer;
+  }
 
+  function generateTemplate(name, data, basicElement) {
+    const template = document.getElementById(name).innerHTML;
+    let element = document.createElement(basicElement || 'tr');
+    Mustache.parse(template);
+    element.innerHTML = Mustache.render(template, data );
+    return element;
+  }
 
-function generateTemplate(name, data, basicElement) {
-  const template = document.getElementById(name).innerHTML;
-  let element = document.createElement(basicElement || 'tr');
-  Mustache.parse(template);
-  element.innerHTML = Mustache.render(template, data );
-  return element;
-}
-
-
-function hideModal(event) {
-  event.preventDefault();
-  document.querySelector('#modal-overlay').classList.remove('show');
-  document.querySelector('#modal-one').classList.remove('show');
-  params = {
+  function hideModal(event) {
+    event.preventDefault();
+    document.querySelector('#modal-overlay').classList.remove('show');
+    document.querySelector('#modal-one').classList.remove('show');
+    params = {
     winsPlayer : 0,
     playerPick : '',
     winsComputer : 0,
@@ -257,28 +246,26 @@ function hideModal(event) {
     progress : [],
     roundWinner : ''
   };
-  playerPickElem.innerHTML = '0';
-  computerPickElem.innerHTML = '0';
-  params.state = 'notStarted';
-  setGameElements();
-}
+    playerPickElem.innerHTML = '0';
+    computerPickElem.innerHTML = '0';
+    params.state = 'notStarted';
+    setGameElements();
+  }
 
-let closeButtons = document.querySelectorAll('.modal .close');
+  let closeButtons = document.querySelectorAll('.modal .close');
 
-for (let i = 0; i < closeButtons.length; i++) {
-  closeButtons[i].addEventListener('click', hideModal);
-}
+  for (let i = 0; i < closeButtons.length; i++) {
+    closeButtons[i].addEventListener('click', hideModal);
+  }
 
-document.querySelector('#modal-overlay').addEventListener('click', hideModal);
-
-let modals = document.querySelectorAll('.modal');
-
-for(let i = 0; i < modals.length; i++) {
-  modals[i].addEventListener('click', function(event){
-      event.stopPropagation();
-    }
-  );
-}
+  document.querySelector('#modal-overlay').addEventListener('click', hideModal);
+    let modals = document.querySelectorAll('.modal');
+    for(let i = 0; i < modals.length; i++) {
+      modals[i].addEventListener('click', function(event){
+        event.stopPropagation();
+      }
+    );
+  }
 
 
 
