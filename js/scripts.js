@@ -36,7 +36,7 @@ playerPick.forEach(function(item) {
 });
 
 
-/* zmienne globalne */
+/* globals verbs */
 let params = {
   winsPlayer : 0,
   playerPick : '',
@@ -55,7 +55,6 @@ const newGame = function () {
   params.playerPick  = window.prompt('Player, please pass your name', 'Player Name');
   params.numberOfRounds = parseInt(window.prompt('How much number round do you want play'));
   reset();
-  params.progress = [];
 
   while (document.querySelector("table tbody").children.length) {
     document.querySelector("table tbody").removeChild(document.querySelector("table tbody").lastChild);
@@ -85,7 +84,7 @@ function getComputerPick() { const randomPick = random();
 }
 
 function checkRoundWinner(playerChoice, computerChoice) {
-  //TODO: weryfikacja warunków przyznawania pkt.
+
   if (playerChoice === computerChoice ) {
     params.roundWinner = tieText; //DRAW
     computerResultElem.innerText = 'Draw!';
@@ -160,7 +159,7 @@ function handlePlayerMove(playerChoice) {
 }
 
 function reset() {
-  params.winsPlayer = params.winsComputer = 0; playerPointsElem.innerText = 0; computerPointsElem.innerText = 0; }
+  params.winsPlayer = params.winsComputer = 0; playerPointsElem.innerText = '0'; computerPointsElem.innerText = '0'; }
 
 
 
@@ -186,7 +185,6 @@ const setGameElements = function () {
       break;
     case 'ended':
       newGameElem.style.display = 'block';
-      newGameButton.style.display = 'block';
       newGameButton.innerHTML = 'Finish Game';
       newRoundButton.style.display = 'none';
       pickElem.style.display = 'none';
@@ -244,7 +242,7 @@ function generateTemplate(name, data, basicElement) {
 }
 
 
-function hideModal(event){
+function hideModal(event) {
   event.preventDefault();
   document.querySelector('#modal-overlay').classList.remove('show');
   document.querySelector('#modal-one').classList.remove('show');
@@ -267,7 +265,7 @@ function hideModal(event){
 
 let closeButtons = document.querySelectorAll('.modal .close');
 
-for(let i = 0; i < closeButtons.length; i++) {
+for (let i = 0; i < closeButtons.length; i++) {
   closeButtons[i].addEventListener('click', hideModal);
 }
 
